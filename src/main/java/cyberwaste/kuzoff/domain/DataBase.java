@@ -13,6 +13,16 @@ public class DataBase {
 		tables.add(table);
 	}
 	
+	public boolean removeTable(String name){
+		for(Table curTable : tables){
+			if(curTable.getName().equals(name)){
+				tables.remove(curTable);
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public Collection<String> getTableNames(){
 		Collection<String> names = new ArrayList<String>();
 		for(Table curTable : tables){
