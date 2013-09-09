@@ -12,6 +12,7 @@ public class DatabaseManager {
     
     public DatabaseManager(String folderName,OutputManager output){
         databaseFolder = new File(folderName);
+        databaseFolder.mkdirs();
         this.output = output;
     }
     
