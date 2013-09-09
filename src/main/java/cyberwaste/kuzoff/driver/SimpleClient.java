@@ -44,7 +44,7 @@ public class SimpleClient {
                CommandRunner commandRunner = new CommandRunner(databaseFolder);
                
                String commandName = result.getString(COMMAND_NAME_OPTION);
-               Map<String, String> parameters = parseParameters(result.getString(PARAMETERS_OPTION));
+               Map<String, String> parameters = parseParameters(result.getString(PARAMETERS_OPTION, ""));
                commandRunner.runCommand(commandName, parameters);
            } else {
                System.err.println("ERROR: Wrong command syntax.\nUsage:\n" + jsap.getUsage());
