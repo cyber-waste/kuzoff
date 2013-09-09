@@ -8,8 +8,12 @@ tasks.withType(Compile) {
 }
 
 dependencies {
+    compile 'com.martiansoftware:jsap:2.1'
 }
 
 repositories {
     mavenCentral()
 }
+
+apply plugin:'application'
+mainClassName = "cyberwaste.kuzoff.driver.SimpleClient"
