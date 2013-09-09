@@ -12,7 +12,7 @@ import com.martiansoftware.jsap.JSAPResult;
 import com.martiansoftware.jsap.Parameter;
 import com.martiansoftware.jsap.SimpleJSAP;
 
-import cyberwaste.kuzoff.CommandRunner;
+import cyberwaste.kuzoff.command.CommandRunner;
 
 public class SimpleClient {
     
