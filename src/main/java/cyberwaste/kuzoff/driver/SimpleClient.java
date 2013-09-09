@@ -31,7 +31,10 @@ public class SimpleClient {
                    new FlaggedOption(COMMAND_NAME_OPTION)
                        .setShortFlag('c').setLongFlag("command").setUsageName("command to execute").setRequired(true),
                    new FlaggedOption(PARAMETERS_OPTION)
-                       .setShortFlag('p').setLongFlag("parameters").setUsageName("command parameters (name_1=value_1;...name_k=value_k").setRequired(false)
+                       .setShortFlag('p')
+                       .setLongFlag("parameters")
+                       .setUsageName("command parameters (name_1=value_1;...name_k=value_k)")
+                       .setRequired(false)
                }
            );
             
