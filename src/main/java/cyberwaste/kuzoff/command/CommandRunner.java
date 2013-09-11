@@ -3,10 +3,12 @@ package cyberwaste.kuzoff.command;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import cyberwaste.kuzoff.database.DatabaseManager;
+import cyberwaste.kuzoff.database.Row;
 import cyberwaste.kuzoff.database.Table;
 import cyberwaste.kuzoff.outputmanager.OutputManager;
 
@@ -43,8 +45,35 @@ public class CommandRunner {
             
             removeTable(tableName);
         }
+        
+        if("addrw".equals(commandName)){
+            String tableName = getStringParameter(parameters, "name");
+            List<String> columnData = getListParameter(parameters,"column");
+            
+            addRow(tableName, columnData);
+        }
+        
+        if("rmvrw".equals(commandName)){
+            String tableName = getStringParameter(parameters, "name");
+            Map<Integer,String> columnData = getMapParameter(parameters, "column");
+            
+            removeRow(tableName, columnData);
+        }
     }
-
+    
+    private Map<Integer, String> getMapParameter(Map<String,String> parameters, String key){
+        Map<Integer, String> result = new HashMap<Integer, String>();
+        
+        int index = 1;
+        String columnData;
+        while ((columnData = getStringParameter(parameters, key + "-" + index)) != null) {
+            result.put(index, columnData);
+            index++;
+        }
+        
+        return result;
+    }
+    
     private List<String> getListParameter(Map<String, String> parameters, String key) {
         List<String> result = new ArrayList<String>();
         
@@ -96,5 +125,21 @@ public class CommandRunner {
         } catch (IOException e) {
             outputManager.outputError(e);
         }
+    }
+    
+    private void addRow(String tableName, List<String> params){
+        try{
+            //Table table = databaseManager.loadTable(tableName);
+            // check for types
+            Row new_row = databaseManager.addRow(tableName,params);
+            outputManager.outputRow(new_row);
+            
+        }catch(IOException e){
+            outputManager.outputError(e);
+        }
+    }
+    
+    private void removeRow(String tableName, Map<Integer,String> params){
+        
     }
 }

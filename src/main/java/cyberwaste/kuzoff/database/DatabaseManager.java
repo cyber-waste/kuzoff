@@ -12,6 +12,7 @@ import org.apache.commons.io.FileUtils;
 public class DatabaseManager {
     
     private static final String METADATA_FILE_NAME = "metadata";
+    private static final String TABLE_FILE_NAME = "table";
     
     private final File databaseFolder;
     
@@ -45,6 +46,28 @@ public class DatabaseManager {
         FileUtils.writeStringToFile(metadataFile, metadata.toString());
         
         return new Table(tableName, columnTypes);
+    }
+    
+    public Row addRow(String tableName, List<String> columnData) throws IOException{
+        File tableDir = new File(databaseFolder, tableName);
+        
+        List<Value> values = new ArrayList<Value>();
+        for(String val : columnData){
+            values.add(new Value(val));
+        }
+        Row row = new Row(values);
+        
+        StringBuilder stringRow = new StringBuilder();
+        for(int i=0;i<row.length();i++){
+            if(stringRow.length() > 0)
+                stringRow.append(' ');
+            stringRow.append(row.getElement(i).getValue());
+        }
+        stringRow.append('\n');
+        File tableFile = new File(tableDir, TABLE_FILE_NAME);
+        FileUtils.writeStringToFile(tableFile, stringRow.toString(), true);
+        
+        return row;
     }
     
     public Collection<Table> listTables() throws IOException{

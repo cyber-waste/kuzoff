@@ -2,6 +2,7 @@ package cyberwaste.kuzoff.outputmanager;
 
 import java.util.Collection;
 
+import cyberwaste.kuzoff.database.Row;
 import cyberwaste.kuzoff.database.Table;
 
 public abstract class OutputManager {
@@ -26,7 +27,13 @@ public abstract class OutputManager {
     public void outputError(Exception e) {
         outputMessage("ERROR: "+ e.getMessage());
     }
-
+    
+    public void outputRow(Row row) {
+        outputMessage("Row added " + row.toString());
+        //empty
+        
+    }
+    
     public abstract void outputTable(Table table);
 
     protected abstract void outputMessage(String message);
