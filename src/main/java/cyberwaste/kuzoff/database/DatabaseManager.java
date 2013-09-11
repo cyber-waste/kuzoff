@@ -5,6 +5,8 @@ import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.apache.commons.io.FileUtils;
+
 public class DatabaseManager {
     
     private final File databaseFolder;
@@ -40,9 +42,13 @@ public class DatabaseManager {
         return result;
     }
     
-    private Table loadTable(String tableDir){
-        Table result = new Table(new File(tableDir).getName());
+    private Table loadTable(String tableDirectory){
+        Table result = new Table(new File(tableDirectory).getName());
         
         return result;
+    }
+
+    public void removeTable(String tableName) {
+        FileUtils.deleteQuietly(new File(databaseFolder, tableName));
     }
 }

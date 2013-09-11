@@ -21,19 +21,30 @@ public class CommandRunner {
         if ("lstbl".equals(commandName)) {
             listTables();
         }
+        
         if ("mktbl".equals(commandName)) {
             String tableName = parameters.get("name");
             createTable(tableName);
+        }
+        
+        if ("rmtbl".equals(commandName)) {
+            String tableName = parameters.get("name");
+            removeTable(tableName);
         }
     }
 
     private void listTables() {
         Collection<Table> result = databaseManager.listTables();
-        outputManager.output(result);
+        outputManager.outputListTables(result);
     }
 
     private void createTable(String tableName) {
         Table result = databaseManager.createTable(tableName);
-        outputManager.output(result);
+        outputManager.outputTableCreated(result);
+    }
+
+    private void removeTable(String tableName) {
+        databaseManager.removeTable(tableName);
+        outputManager.outputTableRemoved(tableName);
     }
 }

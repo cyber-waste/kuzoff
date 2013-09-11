@@ -1,20 +1,16 @@
 package cyberwaste.kuzoff.outputmanager;
 
-import java.util.Collection;
-
 import cyberwaste.kuzoff.database.Table;
 
-public class ConsoleOutputManager implements OutputManager {
-
+public class ConsoleOutputManager extends OutputManager {
+    
     @Override
-    public void output(Collection<Table> tables) {
-        for (Table table : tables) {
-            output(table);
-        }
+    protected void outputMessage(String message) {
+        System.err.println(message);
     }
-
+    
     @Override
-    public void output(Table table) {
+    protected void outputTable(Table table) {
         System.out.println(table.name());
     }
 }
