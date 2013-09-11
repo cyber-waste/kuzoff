@@ -10,7 +10,7 @@ public class ConsoleOutputManager extends OutputManager {
     }
     
     @Override
-    protected void outputTable(Table table) {
+    public void outputTable(Table table) {
         System.out.println(table.name());
     }
 }

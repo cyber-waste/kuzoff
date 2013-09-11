@@ -42,9 +42,8 @@ public class DatabaseManager {
         return result;
     }
     
-    private Table loadTable(String tableDirectory){
+    public Table loadTable(String tableDirectory){
         Table result = new Table(new File(tableDirectory).getName());
-        
         return result;
     }
 

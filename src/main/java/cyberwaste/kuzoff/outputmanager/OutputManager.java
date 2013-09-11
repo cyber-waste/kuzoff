@@ -23,7 +23,7 @@ public abstract class OutputManager {
         outputMessage("Table " + tableName + " removed");
     }
 
-    protected abstract void outputTable(Table table);
+    public abstract void outputTable(Table table);
 
     protected abstract void outputMessage(String message);
 }

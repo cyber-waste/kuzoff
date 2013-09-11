@@ -19,7 +19,13 @@ public class CommandRunner {
 
     public void runCommand(String commandName, Map<String, String> parameters) {
         if ("lstbl".equals(commandName)) {
-            listTables();
+            String tableName = parameters.get("name");
+            
+            if (tableName != null) {
+                showTable(tableName);
+            } else {
+                listTables();
+            }
         }
         
         if ("mktbl".equals(commandName)) {
@@ -46,5 +52,10 @@ public class CommandRunner {
     private void removeTable(String tableName) {
         databaseManager.removeTable(tableName);
         outputManager.outputTableRemoved(tableName);
+    }
+
+    private void showTable(String tableName) {
+        Table result = databaseManager.loadTable(tableName);
+        outputManager.outputTable(result);
     }
 }
