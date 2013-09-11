@@ -129,8 +129,12 @@ public class CommandRunner {
     
     private void addRow(String tableName, List<String> params){
         try{
-            //Table table = databaseManager.loadTable(tableName);
-            // check for types
+            Table table = databaseManager.loadTable(tableName);
+            if(table.columnTypes().size() != params.size()){
+                outputManager.outputError(new Exception("Type of row is not valid"));
+                return;
+            }
+            
             Row new_row = databaseManager.addRow(tableName,params);
             outputManager.outputRow(new_row);
             

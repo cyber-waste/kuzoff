@@ -63,7 +63,7 @@ public class DatabaseManager {
                 stringRow.append(' ');
             stringRow.append(row.getElement(i).getValue());
         }
-        stringRow.append('\n');
+        if(stringRow.length() > 0) stringRow.append('\n');
         File tableFile = new File(tableDir, TABLE_FILE_NAME);
         FileUtils.writeStringToFile(tableFile, stringRow.toString(), true);
         
