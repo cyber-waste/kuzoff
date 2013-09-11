@@ -13,6 +13,7 @@ import com.martiansoftware.jsap.Parameter;
 import com.martiansoftware.jsap.SimpleJSAP;
 
 import cyberwaste.kuzoff.command.CommandRunner;
+import cyberwaste.kuzoff.outputmanager.ConsoleOutputManager;
 
 public class SimpleClient {
     
@@ -41,10 +42,11 @@ public class SimpleClient {
            JSAPResult result = jsap.parse(args);
            if (result.success()) {
                String databaseFolder = result.getString(DATABASE_FOLDER_OPTION);
-               CommandRunner commandRunner = new CommandRunner(databaseFolder);
+               CommandRunner commandRunner = new CommandRunner(databaseFolder, new ConsoleOutputManager());
                
                String commandName = result.getString(COMMAND_NAME_OPTION);
                Map<String, String> parameters = parseParameters(result.getString(PARAMETERS_OPTION, ""));
+               
                commandRunner.runCommand(commandName, parameters);
            } else {
                System.err.println("ERROR: Wrong command syntax.\nUsage:\n" + jsap.getUsage());

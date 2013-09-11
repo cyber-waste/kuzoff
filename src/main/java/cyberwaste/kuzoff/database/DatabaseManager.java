@@ -2,25 +2,28 @@ package cyberwaste.kuzoff.database;
 
 import java.io.File;
 import java.io.FilenameFilter;
-
-import cyberwaste.kuzoff.outputmanager.OutputManager;;
+import java.util.ArrayList;
+import java.util.Collection;
 
 public class DatabaseManager {
     
-    private File databaseFolder;
-    private OutputManager output;
+    private final File databaseFolder;
     
-    public DatabaseManager(String folderName,OutputManager output){
-        databaseFolder = new File(folderName);
+    public DatabaseManager(String databaseFolderName){
+        this.databaseFolder = new File(databaseFolderName);
+        initDatabaseFolder(this.databaseFolder);
+    }
+
+    private final static void initDatabaseFolder(File databaseFolder) {
         databaseFolder.mkdirs();
-        this.output = output;
+    }
+
+    public Table createTable(String tableName){
+        new File(databaseFolder, tableName).mkdir();
+        return new Table(tableName);
     }
     
-    public void createTable(String tableName){
-        new File(databaseFolder,tableName).mkdir();
-    }
-    
-    public void listTables(){
+    public Collection<Table> listTables(){
         String[] dirList = databaseFolder.list(new FilenameFilter() {
             
             @Override
@@ -28,14 +31,18 @@ public class DatabaseManager {
                 return dir.equals(databaseFolder) && new File(dir,name).isDirectory();
             }
         });
-        for(String curDir : dirList){
-            output.show(loadTable(curDir));
+        
+        Collection<Table> result = new ArrayList<Table>();
+        for(String dir : dirList){
+            result.add(loadTable(dir));
         }
+        
+        return result;
     }
     
     private Table loadTable(String tableDir){
-        Table res = new Table(new File(tableDir).getName());
-        // load headers
-        return res;
+        Table result = new Table(new File(tableDir).getName());
+        
+        return result;
     }
 }
