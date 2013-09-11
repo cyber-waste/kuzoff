@@ -23,6 +23,10 @@ public abstract class OutputManager {
         outputMessage("Table " + tableName + " removed");
     }
 
+    public void outputError(Exception e) {
+        outputMessage("ERROR: "+ e.getMessage());
+    }
+
     public abstract void outputTable(Table table);
 
     protected abstract void outputMessage(String message);

@@ -1,6 +1,7 @@
 package cyberwaste.kuzoff.outputmanager;
 
 import cyberwaste.kuzoff.database.Table;
+import cyberwaste.kuzoff.database.Type;
 
 public class ConsoleOutputManager extends OutputManager {
     
@@ -11,6 +12,22 @@ public class ConsoleOutputManager extends OutputManager {
     
     @Override
     public void outputTable(Table table) {
-        System.out.println(table.name());
+        StringBuilder tableInfo = new StringBuilder();
+        tableInfo.append("table ").append(table.name()).append(" (");
+        
+        boolean needComaBefore = false;
+        for (Type columnType : table.columnTypes()) {
+            if (needComaBefore) {
+                tableInfo.append(", ");
+            } else {
+                needComaBefore = true;
+            }
+            
+            tableInfo.append(columnType.name());
+        }
+        
+        tableInfo.append(")");
+        
+        System.out.println(tableInfo.toString());
     }
 }

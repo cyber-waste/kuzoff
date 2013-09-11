@@ -1,6 +1,9 @@
 package cyberwaste.kuzoff.command;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 import cyberwaste.kuzoff.database.DatabaseManager;
@@ -19,7 +22,7 @@ public class CommandRunner {
 
     public void runCommand(String commandName, Map<String, String> parameters) {
         if ("lstbl".equals(commandName)) {
-            String tableName = parameters.get("name");
+            String tableName = getStringParameter(parameters, "name");
             
             if (tableName != null) {
                 showTable(tableName);
@@ -29,33 +32,69 @@ public class CommandRunner {
         }
         
         if ("mktbl".equals(commandName)) {
-            String tableName = parameters.get("name");
-            createTable(tableName);
+            String tableName = getStringParameter(parameters, "name");
+            List<String> columnTypes = getListParameter(parameters, "column");
+            
+            createTable(tableName, columnTypes);
         }
         
         if ("rmtbl".equals(commandName)) {
-            String tableName = parameters.get("name");
+            String tableName = getStringParameter(parameters, "name");
+            
             removeTable(tableName);
         }
     }
 
-    private void listTables() {
-        Collection<Table> result = databaseManager.listTables();
-        outputManager.outputListTables(result);
+    private List<String> getListParameter(Map<String, String> parameters, String key) {
+        List<String> result = new ArrayList<String>();
+        
+        int index = 1;
+        String columnType;
+        while ((columnType = getStringParameter(parameters, key + "-" + index)) != null) {
+            result.add(columnType);
+            index++;
+        }
+        
+        return result;
     }
 
-    private void createTable(String tableName) {
-        Table result = databaseManager.createTable(tableName);
-        outputManager.outputTableCreated(result);
+    private String getStringParameter(Map<String, String> parameters, String key) {
+        return parameters.get(key);
+    }
+
+    private void listTables() {
+        try {
+            Collection<Table> result = databaseManager.listTables();
+            outputManager.outputListTables(result);
+        } catch (IOException e) {
+            outputManager.outputError(e);
+        }
+    }
+
+    private void createTable(String tableName, List<String> columnTypes) {
+        try {
+            Table result = databaseManager.createTable(tableName, columnTypes);
+            outputManager.outputTableCreated(result);
+        } catch (IOException e) {
+            outputManager.outputError(e);
+        }
     }
 
     private void removeTable(String tableName) {
-        databaseManager.removeTable(tableName);
-        outputManager.outputTableRemoved(tableName);
+        try {
+            databaseManager.removeTable(tableName);
+            outputManager.outputTableRemoved(tableName);
+        } catch (IOException e) {
+            outputManager.outputError(e);
+        }
     }
 
     private void showTable(String tableName) {
-        Table result = databaseManager.loadTable(tableName);
-        outputManager.outputTable(result);
+        try {
+            Table result = databaseManager.loadTable(tableName);
+            outputManager.outputTable(result);
+        } catch (IOException e) {
+            outputManager.outputError(e);
+        }
     }
 }
