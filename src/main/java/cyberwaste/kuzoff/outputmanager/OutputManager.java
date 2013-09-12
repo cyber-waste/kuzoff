@@ -29,12 +29,11 @@ public abstract class OutputManager {
     }
     
     public void outputRow(Row row) {
-        outputMessage("Row added " + row.toString());
+        outputMessage("ROW: " + row.toString());
         //empty
         
     }
     
     public abstract void outputTable(Table table);
-
-    protected abstract void outputMessage(String message);
+    public abstract void outputMessage(String message);
 }

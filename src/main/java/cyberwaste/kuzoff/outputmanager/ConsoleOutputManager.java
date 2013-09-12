@@ -6,7 +6,7 @@ import cyberwaste.kuzoff.database.Type;
 public class ConsoleOutputManager extends OutputManager {
     
     @Override
-    protected void outputMessage(String message) {
+    public void outputMessage(String message) {
         System.err.println(message);
     }
     

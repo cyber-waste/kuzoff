@@ -1,11 +1,16 @@
 package cyberwaste.kuzoff.database;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 
@@ -13,6 +18,7 @@ public class DatabaseManager {
     
     private static final String METADATA_FILE_NAME = "metadata";
     private static final String TABLE_FILE_NAME = "table";
+    private static final String TABLE_FILE_NAME_TEMP = "table_temp";
     
     private final File databaseFolder;
     
@@ -24,7 +30,15 @@ public class DatabaseManager {
     private final static void initDatabaseFolder(File databaseFolder) {
         databaseFolder.mkdirs();
     }
-
+    
+    public String getDatabaseName(){
+        return databaseFolder.getName();
+    }
+    
+    public void dropDatabase() throws IOException{
+        FileUtils.deleteDirectory(databaseFolder);
+    }
+    
     public Table createTable(String tableName, List<String> columnTypeNames) throws IOException {
         File tableDirectory = new File(databaseFolder, tableName);
         tableDirectory.mkdir();
@@ -70,6 +84,40 @@ public class DatabaseManager {
         return row;
     }
     
+    public List<Row> removeRow(String tableName, Map<Integer,String> columnData) throws IOException{
+        File tableFile = new File(new File(databaseFolder,tableName), TABLE_FILE_NAME);
+        File tableFileTemp = new File(new File(databaseFolder,tableName), TABLE_FILE_NAME_TEMP);
+        
+        BufferedReader reader = new BufferedReader(new FileReader(tableFile));
+        BufferedWriter writer = new BufferedWriter(new FileWriter(tableFileTemp));
+        
+        String currentLine;
+        List<Row> res = new ArrayList<Row>();;
+        boolean toRemove = true;
+        while((currentLine = reader.readLine()) != null){
+            toRemove = true;
+            String[] curLineData = currentLine.split(" ");
+            for(int curKey : columnData.keySet()){
+                if(!curLineData[curKey-1].equals(columnData.get(curKey))){
+                    toRemove = false;
+                    break;
+                }
+            }
+            if(toRemove == false) writer.write(currentLine+"\n");
+            else{
+                List<Value> valueList = new ArrayList<Value>();
+                for(String val : curLineData){
+                    valueList.add(new Value(val));
+                }
+                res.add(new Row(valueList));
+            }
+        }
+        boolean success = tableFileTemp.renameTo(tableFile);
+        reader.close();
+        writer.close();
+        return res;
+    }
+    
     public Collection<Table> listTables() throws IOException{
         String[] dirList = databaseFolder.list(new FilenameFilter() {
             
@@ -101,7 +149,25 @@ public class DatabaseManager {
         Table result = new Table(tableName, columnTypes);
         return result;
     }
-
+    
+    public List<Row> loadTableData(String tableName) throws IOException{
+        List<Row> result = new ArrayList<Row>();
+        
+        File tableFile = new File(new File(databaseFolder,tableName), TABLE_FILE_NAME);
+        BufferedReader reader = new BufferedReader(new FileReader(tableFile));
+        
+        String currentLine;
+        while((currentLine = reader.readLine()) != null){
+            String[] curLineData = currentLine.split(" ");
+            List<Value> valueList = new ArrayList<Value>();
+            for(String val : curLineData) valueList.add(new Value(val));
+            result.add(new Row(valueList));
+            
+        }
+        reader.close();
+        return result;
+    }
+    
     public void removeTable(String tableName) throws IOException {
         FileUtils.deleteDirectory(new File(databaseFolder, tableName));
     }

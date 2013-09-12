@@ -33,34 +33,69 @@ public class CommandRunner {
             }
         }
         
-        if ("mktbl".equals(commandName)) {
+        else if ("mktbl".equals(commandName)) {
             String tableName = getStringParameter(parameters, "name");
             List<String> columnTypes = getListParameter(parameters, "column");
             
             createTable(tableName, columnTypes);
         }
         
-        if ("rmtbl".equals(commandName)) {
+        else if ("rmtbl".equals(commandName)) {
             String tableName = getStringParameter(parameters, "name");
             
             removeTable(tableName);
         }
         
-        if("addrw".equals(commandName)){
+        else if("addrw".equals(commandName)){
             String tableName = getStringParameter(parameters, "name");
             List<String> columnData = getListParameter(parameters,"column");
             
             addRow(tableName, columnData);
         }
         
-        if("rmvrw".equals(commandName)){
+        else if("rmvrw".equals(commandName)){
             String tableName = getStringParameter(parameters, "name");
             Map<Integer,String> columnData = getMapParameter(parameters, "column");
             
             removeRow(tableName, columnData);
         }
+        
+        else if("drpdb".equals(commandName)){   
+            dropDatabase();
+        }
+        
+        else if("swtbl".equals(commandName)){
+            String tableName = getStringParameter(parameters, "name");
+            showTableData(tableName);
+        }
+        else{
+            outputManager.outputMessage("UNKNOWN OPERATION");
+        }
     }
     
+    private void showTableData(String tableName) {
+        try {
+            Table result = databaseManager.loadTable(tableName);
+            outputManager.outputTable(result);
+            List<Row> tableData = databaseManager.loadTableData(tableName);
+            for(Row curRow : tableData){
+                outputManager.outputRow(curRow);
+            }
+        } catch (IOException e) {
+            outputManager.outputError(e);
+        }
+    }
+
+    private void dropDatabase() {
+        try{
+            databaseManager.dropDatabase();
+            outputManager.outputMessage("DATABASE " + databaseManager.getDatabaseName() + " deleted");
+        }catch (IOException e) {
+            outputManager.outputError(e);
+        }
+        
+    }
+
     private Map<Integer, String> getMapParameter(Map<String,String> parameters, String key){
         Map<Integer, String> result = new HashMap<Integer, String>();
         
@@ -144,6 +179,12 @@ public class CommandRunner {
     }
     
     private void removeRow(String tableName, Map<Integer,String> params){
-        
+        try{
+            List<Row> rowList = databaseManager.removeRow(tableName,params);
+            outputManager.outputMessage("Deleted Rows:");
+            for(Row row : rowList) outputManager.outputRow(row);
+        }catch(IOException e){
+            outputManager.outputError(e);
+        }
     }
 }
