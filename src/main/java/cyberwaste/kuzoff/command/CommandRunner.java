@@ -57,9 +57,14 @@ public class CommandRunner {
         
         else if("rmvrw".equals(commandName)){
             String tableName = getStringParameter(parameters, "name");
-            Map<Integer,String> columnData = getMapParameter(parameters, "column");
-            
-            removeRow(tableName, columnData);
+            int numColumns;
+            try {
+                numColumns = databaseManager.loadTable(tableName).columnTypes().size();
+                Map<Integer,String> columnData = getMapParameter(parameters, "column", numColumns);
+                removeRow(tableName, columnData);
+            } catch (IOException e) {
+                outputManager.outputError(e);
+            }
         }
         
         else if("drpdb".equals(commandName)){   
@@ -98,14 +103,13 @@ public class CommandRunner {
         
     }
 
-    private Map<Integer, String> getMapParameter(Map<String,String> parameters, String key){
+    private Map<Integer, String> getMapParameter(Map<String,String> parameters, String key, int numColumns){
         Map<Integer, String> result = new HashMap<Integer, String>();
         
-        int index = 1;
         String columnData;
-        while ((columnData = getStringParameter(parameters, key + "-" + index)) != null) {
-            result.put(index, columnData);
-            index++;
+        for (int index = 1;index<=numColumns;index++) {
+            columnData = getStringParameter(parameters, key + "-" + index);
+            if(columnData != null) result.put(index, columnData);
         }
         
         return result;
