@@ -45,7 +45,7 @@ public class DatabaseManager {
         
         List<Type> columnTypes = new ArrayList<Type>();
         for (String columnTypeName : columnTypeNames) {
-            columnTypes.add(new Type(columnTypeName));
+            columnTypes.add(Type.createType(columnTypeName));
         }
         
         StringBuilder metadata = new StringBuilder();
@@ -143,7 +143,7 @@ public class DatabaseManager {
         String metadata = FileUtils.readFileToString(new File(tableDirectory, METADATA_FILE_NAME));
         String[] columnTypeNames = metadata.split("\\|");
         for (String columnTypeName : columnTypeNames) {
-            columnTypes.add(new Type(columnTypeName));
+            columnTypes.add(Type.createType(columnTypeName));
         }
         
         Table result = new Table(tableName, columnTypes);

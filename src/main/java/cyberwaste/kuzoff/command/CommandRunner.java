@@ -10,6 +10,8 @@ import java.util.Map;
 import cyberwaste.kuzoff.database.DatabaseManager;
 import cyberwaste.kuzoff.database.Row;
 import cyberwaste.kuzoff.database.Table;
+import cyberwaste.kuzoff.database.Type;
+import cyberwaste.kuzoff.database.Value;
 import cyberwaste.kuzoff.outputmanager.OutputManager;
 
 public class CommandRunner {
@@ -169,7 +171,13 @@ public class CommandRunner {
                 outputManager.outputError(new Exception("Type of row is not valid"));
                 return;
             }
-            
+            List<Type> types = table.columnTypes();
+            for(int i=0;i<params.size();i++){
+                if(!types.get(i).isValid(new Value(params.get(i)))){
+                    outputManager.outputError(new Exception("Type of row is not valid"));
+                    return;
+                }
+            }
             Row new_row = databaseManager.addRow(tableName,params);
             outputManager.outputRow(new_row);
             
@@ -180,6 +188,15 @@ public class CommandRunner {
     
     private void removeRow(String tableName, Map<Integer,String> params){
         try{
+            Table table = databaseManager.loadTable(tableName);
+            List<Type> types = table.columnTypes();
+            for(int curKey : params.keySet()){
+                if(!types.get(curKey-1).isValid(new Value(params.get(curKey)))){
+                    outputManager.outputError(new Exception("Type of row is not valid"));
+                    return;
+                }
+            }
+            
             List<Row> rowList = databaseManager.removeRow(tableName,params);
             outputManager.outputMessage("Deleted Rows:");
             for(Row row : rowList) outputManager.outputRow(row);
