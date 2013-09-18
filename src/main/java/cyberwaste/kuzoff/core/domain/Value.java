@@ -1,4 +1,4 @@
-package cyberwaste.kuzoff.database;
+package cyberwaste.kuzoff.core.domain;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;

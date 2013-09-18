@@ -1,4 +1,4 @@
-package cyberwaste.kuzoff.command;
+package cyberwaste.kuzoff.io;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -7,12 +7,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import cyberwaste.kuzoff.database.DatabaseManager;
-import cyberwaste.kuzoff.database.Row;
-import cyberwaste.kuzoff.database.Table;
-import cyberwaste.kuzoff.database.Type;
-import cyberwaste.kuzoff.database.Value;
-import cyberwaste.kuzoff.outputmanager.OutputManager;
+import cyberwaste.kuzoff.core.DatabaseManager;
+import cyberwaste.kuzoff.core.domain.Row;
+import cyberwaste.kuzoff.core.domain.Table;
+import cyberwaste.kuzoff.core.domain.Type;
+import cyberwaste.kuzoff.core.domain.Value;
 
 public class CommandRunner {
     

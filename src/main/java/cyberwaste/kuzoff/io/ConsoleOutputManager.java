@@ -1,7 +1,7 @@
-package cyberwaste.kuzoff.outputmanager;
+package cyberwaste.kuzoff.io;
 
-import cyberwaste.kuzoff.database.Table;
-import cyberwaste.kuzoff.database.Type;
+import cyberwaste.kuzoff.core.domain.Table;
+import cyberwaste.kuzoff.core.domain.Type;
 
 public class ConsoleOutputManager extends OutputManager {
     

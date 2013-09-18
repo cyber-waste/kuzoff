@@ -1,4 +1,4 @@
-package cyberwaste.kuzoff.database;
+package cyberwaste.kuzoff.core;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -13,6 +13,11 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
+
+import cyberwaste.kuzoff.core.domain.Row;
+import cyberwaste.kuzoff.core.domain.Table;
+import cyberwaste.kuzoff.core.domain.Type;
+import cyberwaste.kuzoff.core.domain.Value;
 
 public class DatabaseManager {
     

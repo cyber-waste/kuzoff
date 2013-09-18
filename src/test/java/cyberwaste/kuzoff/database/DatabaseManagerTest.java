@@ -15,10 +15,10 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import cyberwaste.kuzoff.database.DatabaseManager;
-import cyberwaste.kuzoff.database.Row;
-import cyberwaste.kuzoff.database.Table;
-import cyberwaste.kuzoff.database.Type;
+import cyberwaste.kuzoff.core.DatabaseManager;
+import cyberwaste.kuzoff.core.domain.Row;
+import cyberwaste.kuzoff.core.domain.Table;
+import cyberwaste.kuzoff.core.domain.Type;
 
 @Ignore
 public class DatabaseManagerTest {

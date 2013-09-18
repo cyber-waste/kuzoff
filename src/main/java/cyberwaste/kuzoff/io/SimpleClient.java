@@ -1,4 +1,4 @@
-package cyberwaste.kuzoff.driver;
+package cyberwaste.kuzoff.io;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -11,9 +11,6 @@ import com.martiansoftware.jsap.JSAP;
 import com.martiansoftware.jsap.JSAPResult;
 import com.martiansoftware.jsap.Parameter;
 import com.martiansoftware.jsap.SimpleJSAP;
-
-import cyberwaste.kuzoff.command.CommandRunner;
-import cyberwaste.kuzoff.outputmanager.ConsoleOutputManager;
 
 public class SimpleClient {
     

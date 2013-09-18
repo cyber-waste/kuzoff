@@ -1,4 +1,4 @@
-package cyberwaste.kuzoff.database;
+package cyberwaste.kuzoff.core.domain;
 
 public class TypeChar extends Type{
     

@@ -1,9 +1,9 @@
-package cyberwaste.kuzoff.outputmanager;
+package cyberwaste.kuzoff.io;
 
 import java.util.Collection;
 
-import cyberwaste.kuzoff.database.Row;
-import cyberwaste.kuzoff.database.Table;
+import cyberwaste.kuzoff.core.domain.Row;
+import cyberwaste.kuzoff.core.domain.Table;
 
 public abstract class OutputManager {
 
