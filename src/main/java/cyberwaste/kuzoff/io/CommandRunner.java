@@ -4,8 +4,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import cyberwaste.kuzoff.core.DatabaseManager;
 import cyberwaste.kuzoff.core.domain.Row;
@@ -74,8 +76,55 @@ public class CommandRunner {
             String tableName = getStringParameter(parameters, "name");
             showTableData(tableName);
         }
+        
+        else if("untbl".equals(commandName)){
+            String tableName1 = getStringParameter(parameters, "name-1");
+            String tableName2 = getStringParameter(parameters, "name-2");
+            unionTables(tableName1,tableName2);
+        }
+        
         else{
             outputManager.outputMessage("UNKNOWN OPERATION");
+        }
+    }
+    
+    private void unionTables(String tableName1, String tableName2){
+
+        try {
+            Table table1 = databaseManager.loadTable(tableName1);
+            Table table2 = databaseManager.loadTable(tableName2);
+        
+            List<Type> types1 = table1.columnTypes();
+            List<Type> types2 = table2.columnTypes();
+            if(types1.size() != types2.size()){
+                outputManager.outputError(new Exception("Tables have defferent schemes"));
+                return;
+            }
+            
+            for(int i=0;i<types1.size();i++){
+                if(!types1.get(i).name().equals(types2.get(i).name())){
+                    outputManager.outputError(new Exception("Tables have different schemes"));
+                    return;
+                }
+            }
+            List<String> typeNames = new ArrayList<String>();
+            for(int i=0;i<types1.size();i++) typeNames.add(types1.get(i).name());
+            
+            String newTableName = tableName1+"-"+tableName2+"-union";
+            Table newTable = databaseManager.createTable(newTableName, typeNames);
+            Set<Row> newRows = new HashSet<Row>();
+            for(Row curRow : databaseManager.loadTableData(tableName1)){
+                newRows.add(curRow);
+            }
+            for(Row curRow : databaseManager.loadTableData(tableName2)){
+                newRows.add(curRow);
+            }
+            for(Row curRow : newRows){
+                databaseManager.addRow(newTableName, curRow);
+            }
+            outputManager.outputMessage("NEW TABLE CREATED: " + newTableName);
+        } catch (IOException e) {
+            outputManager.outputError(e);
         }
     }
     
