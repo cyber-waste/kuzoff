@@ -5,26 +5,22 @@ import static org.junit.Assert.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import junit.framework.TestCase;
-
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
-
 
 import cyberwaste.kuzoff.database.DatabaseManager;
 import cyberwaste.kuzoff.database.Row;
 import cyberwaste.kuzoff.database.Table;
 import cyberwaste.kuzoff.database.Type;
-import cyberwaste.kuzoff.database.Value;
 
+@Ignore
 public class DatabaseManagerTest {
     
     private DatabaseManager manager;

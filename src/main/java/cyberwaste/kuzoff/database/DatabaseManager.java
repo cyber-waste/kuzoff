@@ -112,7 +112,7 @@ public class DatabaseManager {
                 res.add(new Row(valueList));
             }
         }
-        boolean success = tableFileTemp.renameTo(tableFile);
+        tableFileTemp.renameTo(tableFile);
         reader.close();
         writer.close();
         return res;

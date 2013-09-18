@@ -9,7 +9,7 @@ public class TypeInt extends Type{
     public boolean isValid(Value val){
         String valString = val.getValue();
         try{
-            int valInt = Integer.parseInt(valString);
+            Integer.parseInt(valString);
             return true;
         }catch (NumberFormatException e) {
             return false;
