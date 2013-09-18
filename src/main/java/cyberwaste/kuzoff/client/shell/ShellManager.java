@@ -84,9 +84,14 @@ public class ShellManager extends IOManager {
     protected boolean hasMoreCommands() {
         return hasMoreCommands;
     }
+    
+    @Override
+    protected void outputResult(String message) {
+        System.out.println(message);
+    }
 
     @Override
-    public void outputMessage(String message) {
+    protected void outputMessage(String message) {
         System.err.println(message);
     }
 

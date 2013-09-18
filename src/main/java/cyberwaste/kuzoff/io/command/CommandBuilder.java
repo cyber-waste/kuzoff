@@ -55,7 +55,7 @@ public class CommandBuilder {
                     @Override
                     public void execute(IOManager ioManager) throws IOException {
                         Table result = databaseManager.loadTable(tableName);
-                        ioManager.outputTable(result);
+                        ioManager.outputTableInfo(result);
                     }
                 };
             } else {
@@ -116,7 +116,7 @@ public class CommandBuilder {
                         }
                     }
                     Row new_row = databaseManager.addRow(tableName,columnData);
-                    ioManager.outputRow(new_row);
+                    ioManager.outputRowAdded(new_row);
                 }
             };
         }
@@ -139,8 +139,7 @@ public class CommandBuilder {
                     }
                     
                     List<Row> rowList = databaseManager.removeRow(tableName,columnData);
-                    ioManager.outputMessage("Deleted Rows:");
-                    for(Row row : rowList) ioManager.outputRow(row);
+                    ioManager.outputRowDeleted(rowList);
                 }
             };
         }
@@ -151,7 +150,7 @@ public class CommandBuilder {
                 @Override
                 public void execute(IOManager ioManager) throws IOException {
                     databaseManager.dropDatabase();
-                    ioManager.outputMessage("DATABASE " + databaseManager.getDatabaseName() + " deleted");
+                    ioManager.outputDatabaseDropped(databaseManager.getDatabaseName());
                 }
             };
         }
@@ -163,12 +162,9 @@ public class CommandBuilder {
 
                 @Override
                 public void execute(IOManager ioManager) throws IOException {
-                    Table result = databaseManager.loadTable(tableName);
-                    ioManager.outputTable(result);
                     List<Row> tableData = databaseManager.loadTableData(tableName);
-                    for(Row curRow : tableData){
-                        ioManager.outputRow(curRow);
-                    }
+                    Table result = databaseManager.loadTable(tableName);
+                    ioManager.outputTableData(result, tableData);
                 }
             };
         }
@@ -182,7 +178,8 @@ public class CommandBuilder {
                 @Override
                 public void execute(IOManager ioManager) throws Exception {
                     Table newTable = databaseManager.unionTable(tableName1, tableName2);
-                    ioManager.outputTable(newTable);
+                    List<Row> tableData = databaseManager.loadTableData(newTable.name());
+                    ioManager.outputTableData(newTable, tableData);
                 }
             };
         }
@@ -196,7 +193,8 @@ public class CommandBuilder {
                 @Override
                 public void execute(IOManager ioManager) throws Exception {
                     Table newTable = databaseManager.differenceTable(tableName1, tableName2);
-                    ioManager.outputTable(newTable);
+                    List<Row> tableData = databaseManager.loadTableData(newTable.name());
+                    ioManager.outputTableData(newTable, tableData);
                 }
             };
         }
@@ -209,7 +207,8 @@ public class CommandBuilder {
                 @Override
                 public void execute(IOManager ioManager) throws Exception {
                     Table newTable = databaseManager.uniqueTable(tableName);
-                    ioManager.outputTable(newTable);
+                    List<Row> tableData = databaseManager.loadTableData(newTable.name());
+                    ioManager.outputTableData(newTable, tableData);
                 }
             };
         }
