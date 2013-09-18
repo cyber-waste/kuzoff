@@ -70,8 +70,6 @@ public class DatabaseManager {
     }
     
     public Row addRow(String tableName, List<String> columnData) throws IOException{
-        File tableDir = new File(databaseFolder, tableName);
-        
         List<Value> values = new ArrayList<Value>();
         for(String val : columnData){
             values.add(new Value(val));
