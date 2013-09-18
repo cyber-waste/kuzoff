@@ -71,6 +71,10 @@ public class DatabaseManager {
         }
         Row row = new Row(values);
         
+        return addRow(tableName, row);
+    }
+    
+    public Row addRow(String tableName, Row row) throws IOException{
         StringBuilder stringRow = new StringBuilder();
         for(int i=0;i<row.length();i++){
             if(stringRow.length() > 0)
@@ -78,7 +82,7 @@ public class DatabaseManager {
             stringRow.append(row.getElement(i).getValue());
         }
         if(stringRow.length() > 0) stringRow.append('\n');
-        File tableFile = new File(tableDir, TABLE_FILE_NAME);
+        File tableFile = new File(new File(databaseFolder, tableName), TABLE_FILE_NAME);
         FileUtils.writeStringToFile(tableFile, stringRow.toString(), true);
         
         return row;
