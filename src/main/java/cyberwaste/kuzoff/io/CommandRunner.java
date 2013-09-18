@@ -83,47 +83,46 @@ public class CommandRunner {
             unionTables(tableName1,tableName2);
         }
         
+        else if("dftbl".equals(commandName)){
+            String tableName1 = getStringParameter(parameters, "name-1");
+            String tableName2 = getStringParameter(parameters, "name-2");
+            differenceTables(tableName1,tableName2);
+        }
+        
+        else if("uqtbl".equals(commandName)){
+            String tableName = getStringParameter(parameters, "name");
+            uniqueTable(tableName);
+        }
+        
         else{
             outputManager.outputMessage("UNKNOWN OPERATION");
         }
     }
     
-    private void unionTables(String tableName1, String tableName2){
-
-        try {
-            Table table1 = databaseManager.loadTable(tableName1);
-            Table table2 = databaseManager.loadTable(tableName2);
+    private void uniqueTable(String tableName) {
+        try{
+            Table newTable = databaseManager.uniqueTable(tableName);
+            outputManager.outputTable(newTable);
+        }catch(Exception e){
+            outputManager.outputError(e);
+        }
         
-            List<Type> types1 = table1.columnTypes();
-            List<Type> types2 = table2.columnTypes();
-            if(types1.size() != types2.size()){
-                outputManager.outputError(new Exception("Tables have defferent schemes"));
-                return;
-            }
-            
-            for(int i=0;i<types1.size();i++){
-                if(!types1.get(i).name().equals(types2.get(i).name())){
-                    outputManager.outputError(new Exception("Tables have different schemes"));
-                    return;
-                }
-            }
-            List<String> typeNames = new ArrayList<String>();
-            for(int i=0;i<types1.size();i++) typeNames.add(types1.get(i).name());
-            
-            String newTableName = tableName1+"-"+tableName2+"-union";
-            Table newTable = databaseManager.createTable(newTableName, typeNames);
-            Set<Row> newRows = new HashSet<Row>();
-            for(Row curRow : databaseManager.loadTableData(tableName1)){
-                newRows.add(curRow);
-            }
-            for(Row curRow : databaseManager.loadTableData(tableName2)){
-                newRows.add(curRow);
-            }
-            for(Row curRow : newRows){
-                databaseManager.addRow(newTableName, curRow);
-            }
-            outputManager.outputMessage("NEW TABLE CREATED: " + newTableName);
-        } catch (IOException e) {
+    }
+
+    private void differenceTables(String tableName1, String tableName2){
+        try{
+            Table newTable = databaseManager.differenceTable(tableName1, tableName2);
+            outputManager.outputTable(newTable);
+        }catch(Exception e){
+            outputManager.outputError(e);
+        }
+    }
+    
+    private void unionTables(String tableName1, String tableName2){
+        try {
+            Table newTable = databaseManager.unionTable(tableName1, tableName2);
+            outputManager.outputTable(newTable);
+        } catch (Exception e) {
             outputManager.outputError(e);
         }
     }
