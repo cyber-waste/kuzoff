@@ -6,9 +6,13 @@ public class TypeChar extends Type{
         super(name);
     }
     
-    public boolean isValid(Value val){
-        String valString = val.getValue();
-        if(valString.length() == 1) return true;
+    public boolean isValid(String val){
+        if(val.length() == 1) return true;
         else return false;
+    }
+
+    @Override
+    public String getValue(String val) {
+        return val;
     }
 }

@@ -69,11 +69,23 @@ public class DatabaseManager {
         return new Table(tableName, columnTypes);
     }
     
-    public Row addRow(String tableName, List<String> columnData) throws IOException{
-        List<Value> values = new ArrayList<Value>();
-        for(String val : columnData){
-            values.add(new Value(val));
+    public Row addRow(String tableName, List<String> columnData) throws Exception{
+        
+        Table table = loadTable(tableName);
+        if(table.columnTypes().size() != columnData.size()){
+            throw new Exception("Type of row is not valid");
         }
+        List<Type> types = table.columnTypes();
+        for(int i=0;i<columnData.size();i++){
+            if(!types.get(i).isValid(columnData.get(i))){
+                throw new Exception("Type of row is not valid");
+            }
+        }
+        
+        List<Value> values = new ArrayList<Value>();
+        for(int i=0; i<columnData.size(); i++)
+            values.add(new Value(columnData.get(i),types.get(i)));
+        
         Row row = new Row(values);
         
         return addRow(tableName, row);
@@ -84,7 +96,7 @@ public class DatabaseManager {
         for(int i=0;i<row.length();i++){
             if(stringRow.length() > 0)
                 stringRow.append(' ');
-            stringRow.append(row.getElement(i).getValue());
+            stringRow.append(row.getElement(i).getData());
         }
         if(stringRow.length() > 0) stringRow.append('\n');
         File tableFile = new File(new File(databaseFolder, tableName), TABLE_FILE_NAME);
@@ -93,7 +105,18 @@ public class DatabaseManager {
         return row;
     }
     
-    public List<Row> removeRow(String tableName, Map<Integer,String> columnData) throws IOException{
+    public List<Row> removeRow(String tableName, Map<Integer,String> columnData) throws Exception{
+        
+        Table table = loadTable(tableName);
+        List<Type> types = table.columnTypes();
+        for(int curKey : columnData.keySet()){
+            Type curType = types.get(curKey-1);
+            if(!curType.isValid(columnData.get(curKey))){
+                throw new Exception("Type of row is not valid");
+            }
+        }
+        
+        
         File tableFile = new File(new File(databaseFolder,tableName), TABLE_FILE_NAME);
         File tableFileTemp = new File(new File(databaseFolder,tableName), TABLE_FILE_NAME_TEMP);
         
@@ -115,8 +138,8 @@ public class DatabaseManager {
             if(toRemove == false) writer.write(currentLine+"\n");
             else{
                 List<Value> valueList = new ArrayList<Value>();
-                for(String val : curLineData){
-                    valueList.add(new Value(val));
+                for(int i=0; i<curLineData.length;i++){
+                    valueList.add(new Value(curLineData[i],types.get(i)));
                 }
                 res.add(new Row(valueList));
             }
@@ -162,6 +185,9 @@ public class DatabaseManager {
     public List<Row> loadTableData(String tableName) throws IOException{
         List<Row> result = new ArrayList<Row>();
         
+        
+        Table table = loadTable(tableName);
+        List<Type> types = table.columnTypes();
         File tableFile = new File(new File(databaseFolder,tableName), TABLE_FILE_NAME);
         BufferedReader reader = new BufferedReader(new FileReader(tableFile));
         
@@ -169,7 +195,10 @@ public class DatabaseManager {
         while((currentLine = reader.readLine()) != null){
             String[] curLineData = currentLine.split(" ");
             List<Value> valueList = new ArrayList<Value>();
-            for(String val : curLineData) valueList.add(new Value(val));
+            for(int i=0;i<types.size();i++){
+                String val = curLineData[i];
+                valueList.add(new Value(val,types.get(i)));
+            }
             result.add(new Row(valueList));
             
         }

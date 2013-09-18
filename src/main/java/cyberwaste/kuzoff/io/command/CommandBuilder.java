@@ -105,16 +105,7 @@ public class CommandBuilder {
 
                 @Override
                 public void execute(IOManager ioManager) throws Exception {
-                    Table table = databaseManager.loadTable(tableName);
-                    if(table.columnTypes().size() != columnData.size()){
-                        throw new Exception("Type of row is not valid");
-                    }
-                    List<Type> types = table.columnTypes();
-                    for(int i=0;i<columnData.size();i++){
-                        if(!types.get(i).isValid(new Value(columnData.get(i)))){
-                            throw new Exception("Type of row is not valid");
-                        }
-                    }
+                    
                     Row new_row = databaseManager.addRow(tableName,columnData);
                     ioManager.outputRow(new_row);
                 }
@@ -130,13 +121,7 @@ public class CommandBuilder {
 
                 @Override
                 public void execute(IOManager ioManager) throws Exception {
-                    Table table = databaseManager.loadTable(tableName);
-                    List<Type> types = table.columnTypes();
-                    for(int curKey : columnData.keySet()){
-                        if(!types.get(curKey-1).isValid(new Value(columnData.get(curKey)))){
-                            throw new Exception("Type of row is not valid");
-                        }
-                    }
+                    
                     
                     List<Row> rowList = databaseManager.removeRow(tableName,columnData);
                     ioManager.outputMessage("Deleted Rows:");

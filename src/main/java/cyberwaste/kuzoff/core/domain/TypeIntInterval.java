@@ -1,14 +1,18 @@
 package cyberwaste.kuzoff.core.domain;
 
-public class TypeInt extends Type{
-    
-    public TypeInt(String name){
+public class TypeIntInterval extends Type{
+
+
+    public TypeIntInterval(String name){
         super(name);
     }
     
     public boolean isValid(String val){
         try{
-            Integer.parseInt(val);
+            int i = val.indexOf("-");
+            if(i == -1) return false;
+            int valInt1 = Integer.parseInt(val.substring(0,i));
+            int valInt2 = Integer.parseInt(val.substring(i+1,val.length()));
             return true;
         }catch (NumberFormatException e) {
             return false;

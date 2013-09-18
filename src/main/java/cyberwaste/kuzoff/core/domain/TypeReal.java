@@ -6,14 +6,18 @@ public class TypeReal extends Type{
         super(name);
     }
     
-    public boolean isValid(Value val){
-        String valString = val.getValue();
+    public boolean isValid(String val){
         try{
-            Double.parseDouble(valString);
+            Double.parseDouble(val);
             return true;
         }
         catch (NumberFormatException e) {
             return false;
         }
+    }
+
+    @Override
+    public String getValue(String val) {
+        return val;
     }
 }
