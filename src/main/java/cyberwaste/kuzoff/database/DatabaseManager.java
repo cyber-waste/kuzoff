@@ -9,8 +9,10 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
 
@@ -175,4 +177,39 @@ public class DatabaseManager {
     public void removeTable(String tableName) throws IOException {
         FileUtils.deleteDirectory(new File(databaseFolder, tableName));
     }
+    
+    public Table unionTable(String tableName1, String tableName2) throws Exception{
+        Table table1 = loadTable(tableName1);
+        Table table2 = loadTable(tableName2);
+    
+        List<Type> types1 = table1.columnTypes();
+        List<Type> types2 = table2.columnTypes();
+        if(types1.size() != types2.size()){
+            throw new Exception("Tables have defferent schemes");
+        }
+        
+        for(int i=0;i<types1.size();i++){
+            if(!types1.get(i).name().equals(types2.get(i).name())){
+                throw new Exception("Tables have different schemes");
+            }
+        }
+        List<String> typeNames = new ArrayList<String>();
+        for(int i=0;i<types1.size();i++) typeNames.add(types1.get(i).name());
+        
+        String newTableName = tableName1+"-"+tableName2+"-union";
+        Table newTable = createTable(newTableName, typeNames);
+        Set<Row> newRows = new HashSet<Row>();
+        for(Row curRow : loadTableData(tableName1)){
+            newRows.add(curRow);
+        }
+        for(Row curRow : loadTableData(tableName2)){
+            newRows.add(curRow);
+        }
+        for(Row curRow : newRows){
+            addRow(newTableName, curRow);
+        }
+        
+        return newTable;
+    }
+    
 }

@@ -92,39 +92,9 @@ public class CommandRunner {
     private void unionTables(String tableName1, String tableName2){
 
         try {
-            Table table1 = databaseManager.loadTable(tableName1);
-            Table table2 = databaseManager.loadTable(tableName2);
-        
-            List<Type> types1 = table1.columnTypes();
-            List<Type> types2 = table2.columnTypes();
-            if(types1.size() != types2.size()){
-                outputManager.outputError(new Exception("Tables have defferent schemes"));
-                return;
-            }
-            
-            for(int i=0;i<types1.size();i++){
-                if(!types1.get(i).name().equals(types2.get(i).name())){
-                    outputManager.outputError(new Exception("Tables have different schemes"));
-                    return;
-                }
-            }
-            List<String> typeNames = new ArrayList<String>();
-            for(int i=0;i<types1.size();i++) typeNames.add(types1.get(i).name());
-            
-            String newTableName = tableName1+"-"+tableName2+"-union";
-            Table newTable = databaseManager.createTable(newTableName, typeNames);
-            Set<Row> newRows = new HashSet<Row>();
-            for(Row curRow : databaseManager.loadTableData(tableName1)){
-                newRows.add(curRow);
-            }
-            for(Row curRow : databaseManager.loadTableData(tableName2)){
-                newRows.add(curRow);
-            }
-            for(Row curRow : newRows){
-                databaseManager.addRow(newTableName, curRow);
-            }
-            outputManager.outputMessage("NEW TABLE CREATED: " + newTableName);
-        } catch (IOException e) {
+            Table newTable = databaseManager.unionTable(tableName1, tableName2);
+            outputManager.outputTable(newTable);
+        } catch (Exception e) {
             outputManager.outputError(e);
         }
     }
