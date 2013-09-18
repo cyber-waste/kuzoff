@@ -20,4 +20,4 @@ repositories {
 }
 
 apply plugin:'application'
-mainClassName = "cyberwaste.kuzoff.client.ShellManager"
+mainClassName = "cyberwaste.kuzoff.client.Client"

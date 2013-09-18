@@ -1,4 +1,4 @@
-package cyberwaste.kuzoff.client;
+package cyberwaste.kuzoff.client.shell;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -21,7 +21,7 @@ import cyberwaste.kuzoff.io.command.CommandBuilder;
 
 public class ShellManager extends IOManager {
     
-    public static void main(String[] args) throws JSAPException {
+    public static void main(String[] args) throws Exception {
         new ShellManager().start();
     }
     
