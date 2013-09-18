@@ -10,6 +10,9 @@ tasks.withType(Compile) {
 dependencies {
     compile 'com.martiansoftware:jsap:2.1'
     compile 'commons-io:commons-io:2.4'
+    compile 'commons-lang:commons-lang:2.6'
+    
+    testCompile 'junit:junit:4.11'
 }
 
 repositories {

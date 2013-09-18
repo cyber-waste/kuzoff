@@ -1,4 +1,4 @@
-package cyberwaste.kuzoff.test;
+package cyberwaste.kuzoff.database;
 
 import static org.junit.Assert.*;
 
