@@ -84,13 +84,27 @@ public class CommandRunner {
             unionTables(tableName1,tableName2);
         }
         
+        else if("dftbl".equals(commandName)){
+            String tableName1 = getStringParameter(parameters, "name-1");
+            String tableName2 = getStringParameter(parameters, "name-2");
+            differenceTables(tableName1,tableName2);
+        }
+        
         else{
             outputManager.outputMessage("UNKNOWN OPERATION");
         }
     }
     
+    private void differenceTables(String tableName1, String tableName2){
+        try{
+            Table newTable = databaseManager.differenceTable(tableName1, tableName2);
+            outputManager.outputTable(newTable);
+        }catch(Exception e){
+            outputManager.outputError(e);
+        }
+    }
+    
     private void unionTables(String tableName1, String tableName2){
-
         try {
             Table newTable = databaseManager.unionTable(tableName1, tableName2);
             outputManager.outputTable(newTable);
