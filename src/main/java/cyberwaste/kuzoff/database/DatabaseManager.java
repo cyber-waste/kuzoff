@@ -245,5 +245,25 @@ public class DatabaseManager {
         
         return newTable;
     }
+
+    public Table uniqueTable(String tableName) throws Exception{
+        Table table = loadTable(tableName);
+        List<Type> types = table.columnTypes();
+        
+        List<String> typeNames = new ArrayList<String>();
+        for(int i=0;i<types.size();i++) typeNames.add(types.get(i).name());
+        
+        String newTableName = tableName+"-unique";
+        Table newTable = createTable(newTableName, typeNames);
+        Set<Row> newRows = new HashSet<Row>();
+        for(Row curRow : loadTableData(tableName))
+            newRows.add(curRow);
+        
+        for(Row curRow : newRows)
+            addRow(newTableName, curRow);
+        
+        return newTable;
+        
+    }
     
 }

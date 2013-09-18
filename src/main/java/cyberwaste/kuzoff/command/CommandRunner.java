@@ -90,11 +90,26 @@ public class CommandRunner {
             differenceTables(tableName1,tableName2);
         }
         
+        else if("uqtbl".equals(commandName)){
+            String tableName = getStringParameter(parameters, "name");
+            uniqueTable(tableName);
+        }
+        
         else{
             outputManager.outputMessage("UNKNOWN OPERATION");
         }
     }
     
+    private void uniqueTable(String tableName) {
+        try{
+            Table newTable = databaseManager.uniqueTable(tableName);
+            outputManager.outputTable(newTable);
+        }catch(Exception e){
+            outputManager.outputError(e);
+        }
+        
+    }
+
     private void differenceTables(String tableName1, String tableName2){
         try{
             Table newTable = databaseManager.differenceTable(tableName1, tableName2);
