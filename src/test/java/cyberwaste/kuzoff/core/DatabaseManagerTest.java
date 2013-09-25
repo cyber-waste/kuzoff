@@ -75,7 +75,7 @@ public class DatabaseManagerTest {
     }
     
     @Test
-    public void removeRowTest() throws IOException{
+    public void removeRowTest() throws Exception {
         Map<Integer,String> columnData = new HashMap<Integer, String>();
         columnData.put(2, "a");
         manager.removeRow("table1", columnData);
