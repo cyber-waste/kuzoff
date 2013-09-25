@@ -1,9 +1,12 @@
 package cyberwaste.kuzoff.core.domain;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 
-public class Table {
+public class Table implements Serializable {
+    
+    private static final long serialVersionUID = 1L;
     
     private final String name;
     private final List<Type> columnTypes;

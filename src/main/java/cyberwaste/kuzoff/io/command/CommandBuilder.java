@@ -18,7 +18,7 @@ public class CommandBuilder {
     
     private final String commandName;
     
-    private String databaseFolder;
+    private DatabaseManager databaseManager;
     private Map<String, String> parameters;
 
     public static CommandBuilder command(String commandName) {
@@ -28,9 +28,14 @@ public class CommandBuilder {
     private CommandBuilder(String commandName) {
         this.commandName = commandName;
     }
+    
+    public CommandBuilder usingDatabaseManager(DatabaseManager databaseManager) {
+        this.databaseManager = databaseManager;
+        return this;
+    }
 
     public CommandBuilder forDatabase(String databaseFolder) {
-        this.databaseFolder = databaseFolder;
+        this.databaseManager.forDatabaseFolder(databaseFolder);
         return this;
     }
 
@@ -40,11 +45,9 @@ public class CommandBuilder {
     }
 
     public Command build() throws IOException {
-        if (databaseFolder == null) {
+        if (databaseManager.getDatabaseName() == null) {
             throw new RuntimeException("Database folder is not specified");
         }
-        
-        final DatabaseManager databaseManager = new DatabaseManager(databaseFolder);
         
         if ("lstbl".equals(commandName)) {
             final String tableName = getStringParameter(parameters, "name");
@@ -55,7 +58,7 @@ public class CommandBuilder {
                     @Override
                     public void execute(IOManager ioManager) throws IOException {
                         Table result = databaseManager.loadTable(tableName);
-                        ioManager.outputTable(result);
+                        ioManager.outputTableInfo(result);
                     }
                 };
             } else {
@@ -105,9 +108,8 @@ public class CommandBuilder {
 
                 @Override
                 public void execute(IOManager ioManager) throws Exception {
-                    
                     Row new_row = databaseManager.addRow(tableName,columnData);
-                    ioManager.outputRow(new_row);
+                    ioManager.outputRowAdded(new_row);
                 }
             };
         }
@@ -121,11 +123,8 @@ public class CommandBuilder {
 
                 @Override
                 public void execute(IOManager ioManager) throws Exception {
-                    
-                    
                     List<Row> rowList = databaseManager.removeRow(tableName,columnData);
-                    ioManager.outputMessage("Deleted Rows:");
-                    for(Row row : rowList) ioManager.outputRow(row);
+                    ioManager.outputRowDeleted(rowList);
                 }
             };
         }
@@ -136,7 +135,7 @@ public class CommandBuilder {
                 @Override
                 public void execute(IOManager ioManager) throws IOException {
                     databaseManager.dropDatabase();
-                    ioManager.outputMessage("DATABASE " + databaseManager.getDatabaseName() + " deleted");
+                    ioManager.outputDatabaseDropped(databaseManager.getDatabaseName());
                 }
             };
         }
@@ -148,12 +147,9 @@ public class CommandBuilder {
 
                 @Override
                 public void execute(IOManager ioManager) throws IOException {
-                    Table result = databaseManager.loadTable(tableName);
-                    ioManager.outputTable(result);
                     List<Row> tableData = databaseManager.loadTableData(tableName);
-                    for(Row curRow : tableData){
-                        ioManager.outputRow(curRow);
-                    }
+                    Table result = databaseManager.loadTable(tableName);
+                    ioManager.outputTableData(result, tableData);
                 }
             };
         }
@@ -167,7 +163,8 @@ public class CommandBuilder {
                 @Override
                 public void execute(IOManager ioManager) throws Exception {
                     Table newTable = databaseManager.unionTable(tableName1, tableName2);
-                    ioManager.outputTable(newTable);
+                    List<Row> tableData = databaseManager.loadTableData(newTable.name());
+                    ioManager.outputTableData(newTable, tableData);
                 }
             };
         }
@@ -181,7 +178,8 @@ public class CommandBuilder {
                 @Override
                 public void execute(IOManager ioManager) throws Exception {
                     Table newTable = databaseManager.differenceTable(tableName1, tableName2);
-                    ioManager.outputTable(newTable);
+                    List<Row> tableData = databaseManager.loadTableData(newTable.name());
+                    ioManager.outputTableData(newTable, tableData);
                 }
             };
         }
@@ -194,7 +192,8 @@ public class CommandBuilder {
                 @Override
                 public void execute(IOManager ioManager) throws Exception {
                     Table newTable = databaseManager.uniqueTable(tableName);
-                    ioManager.outputTable(newTable);
+                    List<Row> tableData = databaseManager.loadTableData(newTable.name());
+                    ioManager.outputTableData(newTable, tableData);
                 }
             };
         }
