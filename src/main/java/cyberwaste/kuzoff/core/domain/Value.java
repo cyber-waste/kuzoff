@@ -1,9 +1,13 @@
 package cyberwaste.kuzoff.core.domain;
 
+import java.io.Serializable;
+
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-public class Value {
+public class Value implements Serializable {
+    
+    private static final long serialVersionUID = 1L;
     
     private String val;
     

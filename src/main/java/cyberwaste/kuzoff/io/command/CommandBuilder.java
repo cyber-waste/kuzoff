@@ -18,7 +18,7 @@ public class CommandBuilder {
     
     private final String commandName;
     
-    private String databaseFolder;
+    private DatabaseManager databaseManager;
     private Map<String, String> parameters;
 
     public static CommandBuilder command(String commandName) {
@@ -28,9 +28,14 @@ public class CommandBuilder {
     private CommandBuilder(String commandName) {
         this.commandName = commandName;
     }
+    
+    public CommandBuilder usingDatabaseManager(DatabaseManager databaseManager) {
+        this.databaseManager = databaseManager;
+        return this;
+    }
 
     public CommandBuilder forDatabase(String databaseFolder) {
-        this.databaseFolder = databaseFolder;
+        this.databaseManager.forDatabaseFolder(databaseFolder);
         return this;
     }
 
@@ -40,11 +45,9 @@ public class CommandBuilder {
     }
 
     public Command build() throws IOException {
-        if (databaseFolder == null) {
+        if (databaseManager.getDatabaseName() == null) {
             throw new RuntimeException("Database folder is not specified");
         }
-        
-        final DatabaseManager databaseManager = new DatabaseManager(databaseFolder);
         
         if ("lstbl".equals(commandName)) {
             final String tableName = getStringParameter(parameters, "name");

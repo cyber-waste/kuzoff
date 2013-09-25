@@ -1,5 +1,7 @@
 package cyberwaste.kuzoff.client;
 
+import cyberwaste.kuzoff.client.rmi.RmiClientManager;
+import cyberwaste.kuzoff.client.rmi.RmiServerManager;
 import cyberwaste.kuzoff.client.shell.ShellManager;
 
 public class Client {
@@ -14,6 +16,10 @@ public class Client {
         
         if ("shell".equals(clientName)) {
             ShellManager.main(args);
+        } else if ("rmi-client".equals(clientName)) {
+            RmiClientManager.main(args);
+        } else if ("rmi-server".equals(clientName)) {
+            RmiServerManager.main(args);
         } else {
             System.err.println("Unknown client");
             System.exit(1);

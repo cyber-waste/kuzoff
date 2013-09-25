@@ -1,6 +1,10 @@
 package cyberwaste.kuzoff.core.domain;
 
-public abstract class Type {
+import java.io.Serializable;
+
+public abstract class Type implements Serializable {
+    
+    private static final long serialVersionUID = 1L;
     
     private final String name;
 

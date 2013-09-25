@@ -8,6 +8,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
 import com.martiansoftware.jsap.FlaggedOption;
 import com.martiansoftware.jsap.JSAP;
 import com.martiansoftware.jsap.JSAPException;
@@ -15,14 +18,17 @@ import com.martiansoftware.jsap.JSAPResult;
 import com.martiansoftware.jsap.Parameter;
 import com.martiansoftware.jsap.SimpleJSAP;
 
+import cyberwaste.kuzoff.core.DatabaseManager;
 import cyberwaste.kuzoff.io.IOManager;
 import cyberwaste.kuzoff.io.command.Command;
 import cyberwaste.kuzoff.io.command.CommandBuilder;
 
 public class ShellManager extends IOManager {
     
+    @SuppressWarnings("resource")
     public static void main(String[] args) throws Exception {
-        new ShellManager().start();
+        ApplicationContext applicationContext = new ClassPathXmlApplicationContext("shellClientContext.xml");
+        applicationContext.getBean(ShellManager.class).start();
     }
     
     private static final String DATABASE_FOLDER_OPTION = "database";
@@ -34,9 +40,11 @@ public class ShellManager extends IOManager {
     private final JSAP jsap;
     private final BufferedReader reader;
     
+    private DatabaseManager databaseManager;
+    
     private boolean hasMoreCommands;
     
-    private ShellManager() throws JSAPException {
+    protected ShellManager() throws JSAPException {
         this.reader = new BufferedReader(new InputStreamReader(System.in));
         
         this.jsap = new SimpleJSAP(
@@ -74,7 +82,12 @@ public class ShellManager extends IOManager {
             String commandName = result.getString(COMMAND_NAME_OPTION);
             Map<String, String> parameters = parseParameters(result.getString(PARAMETERS_OPTION, ""));
             
-            return CommandBuilder.command(commandName).forDatabase(databaseFolder).withParameters(parameters).build();
+            return CommandBuilder
+                    .command(commandName)
+                    .usingDatabaseManager(databaseManager)
+                    .forDatabase(databaseFolder)
+                    .withParameters(parameters)
+                    .build();
         } else {
             throw new IOException("Wrong command syntax: " + nextCommandAsString);
         }
@@ -105,5 +118,9 @@ public class ShellManager extends IOManager {
         }
         
         return result;
+    }
+    
+    public void setDatabaseManager(DatabaseManager databaseManager) {
+        this.databaseManager = databaseManager;
     }
 }

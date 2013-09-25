@@ -15,19 +15,20 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import cyberwaste.kuzoff.core.DatabaseManager;
 import cyberwaste.kuzoff.core.domain.Row;
 import cyberwaste.kuzoff.core.domain.Table;
 import cyberwaste.kuzoff.core.domain.Type;
+import cyberwaste.kuzoff.core.impl.DatabaseManagerImpl;
 
 @Ignore
 public class DatabaseManagerTest {
     
-    private DatabaseManager manager;
+    private DatabaseManagerImpl manager;
     
     @Before
     public void setUp() throws Exception {
-        manager = new DatabaseManager("/home/vlg/Documents/db_test");
+        manager = new DatabaseManagerImpl();
+        manager.forDatabaseFolder("/home/vlg/Documents/db_test");
         List<String> types = new ArrayList<String>();
         types.add("int"); types.add("char");
         manager.createTable("table1",types);
