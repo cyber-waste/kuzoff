@@ -2,10 +2,13 @@ package cyberwaste.kuzoff.core.domain;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 
 import org.apache.commons.io.FileUtils;
 
-public class TypeTextFile extends Type{
+public class TypeTextFile extends Type implements Serializable {
+    
+    private static final long serialVersionUID = 1L;
     
     public TypeTextFile(String name){
         super(name);

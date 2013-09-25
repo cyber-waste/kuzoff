@@ -10,8 +10,6 @@ import java.util.Map;
 import cyberwaste.kuzoff.core.DatabaseManager;
 import cyberwaste.kuzoff.core.domain.Row;
 import cyberwaste.kuzoff.core.domain.Table;
-import cyberwaste.kuzoff.core.domain.Type;
-import cyberwaste.kuzoff.core.domain.Value;
 import cyberwaste.kuzoff.io.IOManager;
 
 public class CommandBuilder {

@@ -1,8 +1,11 @@
 package cyberwaste.kuzoff.core.domain;
 
-public class TypeIntInterval extends Type{
+import java.io.Serializable;
 
-
+public class TypeIntInterval extends Type implements Serializable {
+    
+    private static final long serialVersionUID = 1L;
+    
     public TypeIntInterval(String name){
         super(name);
     }
@@ -11,8 +14,8 @@ public class TypeIntInterval extends Type{
         try{
             int i = val.indexOf("-");
             if(i == -1) return false;
-            int valInt1 = Integer.parseInt(val.substring(0,i));
-            int valInt2 = Integer.parseInt(val.substring(i+1,val.length()));
+            Integer.parseInt(val.substring(0,i));
+            Integer.parseInt(val.substring(i+1,val.length()));
             return true;
         }catch (NumberFormatException e) {
             return false;
