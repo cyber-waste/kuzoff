@@ -82,12 +82,16 @@ public class ShellManager extends IOManager {
             String commandName = result.getString(COMMAND_NAME_OPTION);
             Map<String, String> parameters = parseParameters(result.getString(PARAMETERS_OPTION, ""));
             
-            return CommandBuilder
-                    .command(commandName)
-                    .usingDatabaseManager(databaseManager)
-                    .forDatabase(databaseFolder)
-                    .withParameters(parameters)
-                    .build();
+            try {
+                return CommandBuilder
+                        .command(commandName)
+                        .usingDatabaseManager(databaseManager)
+                        .forDatabase(databaseFolder)
+                        .withParameters(parameters)
+                        .build();
+            } catch (Exception e) {
+                return null;
+            }
         } else {
             throw new IOException("Wrong command syntax: " + nextCommandAsString);
         }

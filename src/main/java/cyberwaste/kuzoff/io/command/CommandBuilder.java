@@ -18,6 +18,7 @@ public class CommandBuilder {
     
     private DatabaseManager databaseManager;
     private Map<String, String> parameters;
+    private Map<String,Class> commands;
 
     public static CommandBuilder command(String commandName) {
         return new CommandBuilder(commandName);
@@ -25,6 +26,17 @@ public class CommandBuilder {
 
     private CommandBuilder(String commandName) {
         this.commandName = commandName;
+        commands = new HashMap<String, Class>();
+        commands.put("lstbl", CommandListTables.class);
+        commands.put("mktbl", CommandMakeTable.class);
+        commands.put("rwmtbl", CommandRemoveTable.class);
+        commands.put("addrw", CommandAddRow.class);
+        commands.put("rmvrw", CommandRemoveRow.class);
+        commands.put("drpdb", CommandDropDatabase.class);
+        commands.put("swtbl", CommandShowTable.class);
+        commands.put("untbl", CommandUnionTables.class);
+        commands.put("dftbl", CommandDifferenceTables.class);
+        commands.put("uqtbl", CommandUniqueTable.class);
     }
     
     public CommandBuilder usingDatabaseManager(DatabaseManager databaseManager) {
@@ -42,176 +54,37 @@ public class CommandBuilder {
         return this;
     }
 
-    public Command build() throws IOException {
+    public Command build() throws Exception {
         if (databaseManager.getDatabaseName() == null) {
             throw new RuntimeException("Database folder is not specified");
         }
         
-        if ("lstbl".equals(commandName)) {
-            final String tableName = getStringParameter(parameters, "name");
-            
-            if (tableName != null) {
-                return new Command() {
-
-                    @Override
-                    public void execute(IOManager ioManager) throws IOException {
-                        Table result = databaseManager.loadTable(tableName);
-                        ioManager.outputTableInfo(result);
-                    }
-                };
-            } else {
-                return new Command() {
-
-                    @Override
-                    public void execute(IOManager ioManager) throws IOException {
-                        Collection<Table> result = databaseManager.listTables();
-                        ioManager.outputListTables(result);
-                    }
-                };
-            }
+        if(commands.containsKey(commandName)){
+            Class commandClass = commands.get(commandName);
+            Command command = (Command)commandClass.newInstance();
+            command.setState(parameters, databaseManager);
+            return command;
         }
-        
-        else if ("mktbl".equals(commandName)) {
-            final String tableName = getStringParameter(parameters, "name");
-            final List<String> columnTypes = getListParameter(parameters, "column");
-            
-            return new Command() {
-
-                @Override
-                public void execute(IOManager ioManager) throws IOException {
-                    Table result = databaseManager.createTable(tableName, columnTypes);
-                    ioManager.outputTableCreated(result);
-                }
-            };
-        }
-        
-        else if ("rmtbl".equals(commandName)) {
-            final String tableName = getStringParameter(parameters, "name");
-            
-            return new Command() {
-
-                @Override
-                public void execute(IOManager ioManager) throws IOException {
-                    databaseManager.removeTable(tableName);
-                    ioManager.outputTableRemoved(tableName);
-                }
-            };
-        }
-        
-        else if("addrw".equals(commandName)){
-            final String tableName = getStringParameter(parameters, "name");
-            final List<String> columnData = getListParameter(parameters,"column");
-            
-            return new Command() {
-
-                @Override
-                public void execute(IOManager ioManager) throws Exception {
-                    Row new_row = databaseManager.addRow(tableName,columnData);
-                    ioManager.outputRowAdded(new_row);
-                }
-            };
-        }
-        
-        else if("rmvrw".equals(commandName)){
-            final String tableName = getStringParameter(parameters, "name");
-            int numColumns = databaseManager.loadTable(tableName).columnTypes().size();
-            final Map<Integer,String> columnData = getMapParameter(parameters, "column", numColumns);
-            
-            return new Command() {
-
-                @Override
-                public void execute(IOManager ioManager) throws Exception {
-                    List<Row> rowList = databaseManager.removeRow(tableName,columnData);
-                    ioManager.outputRowDeleted(rowList);
-                }
-            };
-        }
-        
-        else if("drpdb".equals(commandName)){
-            return new Command() {
-
-                @Override
-                public void execute(IOManager ioManager) throws IOException {
-                    databaseManager.dropDatabase();
-                    ioManager.outputDatabaseDropped(databaseManager.getDatabaseName());
-                }
-            };
-        }
-        
-        else if("swtbl".equals(commandName)){
-            final String tableName = getStringParameter(parameters, "name");
-            
-            return new Command() {
-
-                @Override
-                public void execute(IOManager ioManager) throws IOException {
-                    List<Row> tableData = databaseManager.loadTableData(tableName);
-                    Table result = databaseManager.loadTable(tableName);
-                    ioManager.outputTableData(result, tableData);
-                }
-            };
-        }
-        
-        else if("untbl".equals(commandName)){
-            final String tableName1 = getStringParameter(parameters, "name-1");
-            final String tableName2 = getStringParameter(parameters, "name-2");
-            
-            return new Command() {
-
-                @Override
-                public void execute(IOManager ioManager) throws Exception {
-                    Table newTable = databaseManager.unionTable(tableName1, tableName2);
-                    List<Row> tableData = databaseManager.loadTableData(newTable.name());
-                    ioManager.outputTableData(newTable, tableData);
-                }
-            };
-        }
-        
-        else if("dftbl".equals(commandName)){
-            final String tableName1 = getStringParameter(parameters, "name-1");
-            final String tableName2 = getStringParameter(parameters, "name-2");
-            
-            return new Command() {
-
-                @Override
-                public void execute(IOManager ioManager) throws Exception {
-                    Table newTable = databaseManager.differenceTable(tableName1, tableName2);
-                    List<Row> tableData = databaseManager.loadTableData(newTable.name());
-                    ioManager.outputTableData(newTable, tableData);
-                }
-            };
-        }
-        
-        else if("uqtbl".equals(commandName)){
-            final String tableName = getStringParameter(parameters, "name");
-            
-            return new Command() {
-
-                @Override
-                public void execute(IOManager ioManager) throws Exception {
-                    Table newTable = databaseManager.uniqueTable(tableName);
-                    List<Row> tableData = databaseManager.loadTableData(newTable.name());
-                    ioManager.outputTableData(newTable, tableData);
-                }
-            };
-        }
-        
         else{
-            return new Command() {
-
-                @Override
-                public void execute(IOManager ioManager) throws Exception {
-                    throw new Exception("Unknown command");
-                }
-            };
+            return new CommandUnknown();
         }
+        //if("lstbl")
+        //else if ("mktbl".equals(commandName)) {
+        //else if ("rmtbl".equals(commandName)) {      
+        //else if("addrw".equals(commandName)){        
+        //else if("rmvrw".equals(commandName)){
+        //else if("drpdb".equals(commandName)){
+        //else if("swtbl".equals(commandName)){
+        //else if("untbl".equals(commandName)){
+        //else if("dftbl".equals(commandName)){
+        //else if("uqtbl".equals(commandName)){
     }
 
-    private String getStringParameter(Map<String, String> parameters, String key) {
+    public static String getStringParameter(Map<String, String> parameters, String key) {
         return parameters.get(key);
     }
     
-    private List<String> getListParameter(Map<String, String> parameters, String key) {
+    public static List<String> getListParameter(Map<String, String> parameters, String key) {
         List<String> result = new ArrayList<String>();
         
         int index = 1;
@@ -224,7 +97,7 @@ public class CommandBuilder {
         return result;
     }
 
-    private Map<Integer, String> getMapParameter(Map<String,String> parameters, String key, int numColumns){
+    public static Map<Integer, String> getMapParameter(Map<String,String> parameters, String key, int numColumns){
         Map<Integer, String> result = new HashMap<Integer, String>();
         
         String columnData;
