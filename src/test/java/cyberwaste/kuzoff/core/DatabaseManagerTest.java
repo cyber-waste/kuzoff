@@ -20,7 +20,6 @@ import cyberwaste.kuzoff.core.domain.Table;
 import cyberwaste.kuzoff.core.domain.Type;
 import cyberwaste.kuzoff.core.impl.DatabaseManagerImpl;
 
-@Ignore
 public class DatabaseManagerTest {
     
     private DatabaseManagerImpl manager;
@@ -39,6 +38,17 @@ public class DatabaseManagerTest {
         row.add("20"); row.add("b");
         manager.addRow("table1", row);
         
+        manager.createTable("table2", types);
+        row.clear();
+        row.add("20"); row.add("b");
+        manager.addRow("table2", row);
+        row.clear();
+        row.add("30"); row.add("c");
+        manager.addRow("table2", row);
+        row.clear();
+        row.add("30"); row.add("c");
+        manager.addRow("table2", row);
+        
     }
 
     @After
@@ -50,11 +60,16 @@ public class DatabaseManagerTest {
     public void listTablesTest() throws IOException {
         String[] typeNames = {"int", "char"}; 
         Collection<Table> tables = manager.listTables();
-        assertEquals(1, tables.size());
+        assertEquals(2, tables.size());
         Iterator<Table> it = tables.iterator();
         Table table = it.next();
-        assertEquals(table.name(), "table1");
+        assertEquals(table.name(), "table2");
         List<Type> types = table.columnTypes();
+        for(int i=0;i<types.size();i++){
+            assertEquals(types.get(i).name(),typeNames[i]);
+        }
+        table = it.next();
+        assertEquals(table.name(), "table1");
         for(int i=0;i<types.size();i++){
             assertEquals(types.get(i).name(),typeNames[i]);
         }
@@ -87,5 +102,43 @@ public class DatabaseManagerTest {
             assertEquals(row.getElement(i).getValue(), rowDataActual[i]);
         }
     }
+    
+    @Test
+    public void unionTablesTest() throws Exception{
+        Table unionTable = manager.unionTable("table1", "table2");
+        List<Row> rows = manager.loadTableData(unionTable.name());
+        assertEquals(3, rows.size());
+        String[][] rowDataActual = {{"10","a"},{"20","b"},{"30","c"}};
+        for(int i=0;i<rows.size();i++){
+            for(int j=0;j<unionTable.columnTypes().size();j++){
+                assertEquals(rowDataActual[i][j], rows.get(i).getElement(j).getValue());
+            }
+        }
+    }
 
+    @Test
+    public void differenceTableTest() throws Exception{
+        Table differenceTable = manager.differenceTable("table1", "table2");
+        List<Row> rows = manager.loadTableData(differenceTable.name());
+        assertEquals(1, rows.size());
+        Row row = rows.get(0);
+        String[] rowDataActual = {"10","a"};
+        for(int i=0;i<differenceTable.columnTypes().size();i++){
+            assertEquals(rowDataActual[i], row.getElement(i).getValue());
+        }
+    }
+    
+    @Test
+    public void uniqueTableTest() throws Exception{
+        Table uniqueTable = manager.uniqueTable("table2");
+        List<Row> rows = manager.loadTableData(uniqueTable.name());
+        assertEquals(2, rows.size());
+        String[][] rowDataActual = {{"20","b"},{"30","c"}};
+        for(int i=0;i<rows.size();i++){
+            for(int j=0;j<uniqueTable.columnTypes().size();j++){
+                assertEquals(rowDataActual[i][j], rows.get(i).getElement(j).getValue());
+            }
+        }
+    }
+    
 }
