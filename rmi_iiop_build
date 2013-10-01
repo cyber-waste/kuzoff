@@ -1,0 +1,3 @@
+source /etc/environment
+gradle installApp
+rmic -poa -iiop  -d ./bin -classpath .:./bin cyberwaste.kuzoff.core.impl.DatabaseManagerImpl

@@ -20,7 +20,7 @@ public abstract class IOManager {
 
     protected abstract void outputResult(String message);
     
-    protected void start() {
+    public void start() {
         while (hasMoreCommands()) {
             try {
                 Command command = getNextCommand();

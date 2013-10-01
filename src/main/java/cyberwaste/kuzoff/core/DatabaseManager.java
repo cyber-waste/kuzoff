@@ -1,6 +1,8 @@
 package cyberwaste.kuzoff.core;
 
 import java.io.IOException;
+import java.rmi.Remote;
+import java.rmi.RemoteException;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -8,9 +10,9 @@ import java.util.Map;
 import cyberwaste.kuzoff.core.domain.Row;
 import cyberwaste.kuzoff.core.domain.Table;
 
-public interface DatabaseManager {
+public interface DatabaseManager extends Remote {
 
-    void forDatabaseFolder(String databaseFolder);
+    void forDatabaseFolder(String databaseFolder) throws RemoteException;
 
     Table loadTable(String tableName) throws IOException;
 
@@ -26,7 +28,7 @@ public interface DatabaseManager {
 
     void dropDatabase() throws IOException;
 
-    String getDatabaseName();
+    String getDatabaseName() throws RemoteException;
 
     List<Row> loadTableData(String tableName) throws IOException;
 

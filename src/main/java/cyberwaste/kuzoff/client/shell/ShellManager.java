@@ -44,9 +44,8 @@ public class ShellManager extends IOManager {
     
     private boolean hasMoreCommands;
     
-    protected ShellManager() throws JSAPException {
+    public ShellManager() throws JSAPException {
         this.reader = new BufferedReader(new InputStreamReader(System.in));
-        
         this.jsap = new SimpleJSAP(
             "kuzoff",
             "",
@@ -65,7 +64,11 @@ public class ShellManager extends IOManager {
         
         this.hasMoreCommands = true;
     }
-
+    
+    void setDataBaseManager(DatabaseManager manager){
+        this.databaseManager = manager;
+    }
+    
     @Override
     protected Command getNextCommand() throws IOException {
         String nextCommandAsString = reader.readLine();

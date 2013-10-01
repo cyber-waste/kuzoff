@@ -1,6 +1,7 @@
 package cyberwaste.kuzoff.io.command;
 
 import java.io.IOException;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -44,7 +45,7 @@ public class CommandBuilder {
         return this;
     }
 
-    public CommandBuilder forDatabase(String databaseFolder) {
+    public CommandBuilder forDatabase(String databaseFolder) throws RemoteException {
         this.databaseManager.forDatabaseFolder(databaseFolder);
         return this;
     }
