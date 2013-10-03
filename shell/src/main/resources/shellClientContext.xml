@@ -9,7 +9,7 @@
         
     <bean name="databaseManager" class="cyberwaste.kuzoff.core.impl.DatabaseManagerImpl" />
         
-    <bean name="shellClient" class="cyberwaste.kuzoff.client.shell.ShellManager">
+    <bean name="shellClient" class="cyberwaste.kuzoff.shell.ShellManager">
         <property name="databaseManager" ref="databaseManager" />
     </bean>
     
