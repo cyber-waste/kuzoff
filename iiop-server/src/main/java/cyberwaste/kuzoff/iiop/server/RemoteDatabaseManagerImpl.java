@@ -1,4 +1,4 @@
-package cyberwaste.kuzoff.core.impl;
+package cyberwaste.kuzoff.iiop.server;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

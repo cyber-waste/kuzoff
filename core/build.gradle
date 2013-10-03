@@ -7,8 +7,19 @@ tasks.withType(Compile) {
     options.encoding = 'UTF-8'
 }
 
+sourceSets {
+    main {
+        java {
+            srcDir 'src/main/java'
+        }
+        resources {
+            srcDir 'src/main/resources'
+            srcDir 'src/main/scripts'
+        }
+    }
+}
+
 dependencies {
-    compile 'com.martiansoftware:jsap:2.1'
     compile 'commons-io:commons-io:2.4'
     compile 'commons-lang:commons-lang:2.6'
     compile 'org.springframework:spring-context:3.2.4.RELEASE'
