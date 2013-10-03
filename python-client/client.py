@@ -1,5 +1,5 @@
 from httplib2 import Http
-from urllib import urlencode
+import json
 
 h = httplib2.Http()
 host = 'http://localhost/'
@@ -19,30 +19,30 @@ def parseParameters(data) :
     for pair in pairs :
         param = pair.split('=')
         res[param[0]] = param[1]
-    return res
+    return json.dumps(res)
 
 def listTables()  :  
     resp, content = h.request(host + db + "/listtables", "GET")
     print content
 
 def makeTable(data):
-    resp, content = h.request(host + db + "/maketable", "POST", data)
+    resp, content = h.request(host + db + "/maketable", "POST", parseParameters(data))
     print content
     
 def removeTable(name) :
-    resp, content = h.request(host + db + "/removetable", "POST", data)
+    resp, content = h.request(host + db + "/removetable", "POST", parseParameters(data))
     print content
     
 def addRow(data) :
-    resp, content = h.request(host + db + "/addrow", "POST", data)
+    resp, content = h.request(host + db + "/addrow", "POST", parseParameters(data))
     print content
     
 def removeRow(data) :
-    resp, content = h.request(host + db + "/removerow", "POST", data)
+    resp, content = h.request(host + db + "/removerow", "POST", parseParameters(data))
     print content
     
 def dropDatabase() :
-    resp, content = h.request(host + db + "/dropdatabase", "POST", data)
+    resp, content = h.request(host + db + "/dropdatabase", "POST", parseParameters(data))
     print content
     
 def showTable(name) :
@@ -50,15 +50,15 @@ def showTable(name) :
     print content
     
 def unionTables(data) :
-    resp, content = h.request(host + db + "/uniontables", "POST", data)
+    resp, content = h.request(host + db + "/uniontables", "POST", parseParameters(data))
     print content
     
 def differenceTables(data) :
-    resp, content = h.request(host + db + "/differencetables", "POST", data)
+    resp, content = h.request(host + db + "/differencetables", "POST", parseParameters(data))
     print content
     
 def uniqueTable(data) :
-    resp, content = h.request(host + db + "/uniquetable", "POST", data)
+    resp, content = h.request(host + db + "/uniquetable", "POST", parseParameters(data))
     print content
 
 
