@@ -9,11 +9,54 @@ tasks.withType(Compile) {
 
 dependencies {
     compile project(':core')
-    compile project(':shell')
+    
+    compile 'org.springframework:spring-context:3.2.4.RELEASE'
 }
+
 repositories {
     mavenCentral()
 }
 
+task rmiPrepare << {
+    file("$buildDir/rmic").mkdirs();
+}
+
+task rmiDependencies(type: Sync) {
+    from configurations.compile
+    into "$buildDir/rmi-dependencies"
+}
+rmiDependencies.dependsOn rmiPrepare
+
+task rmic(type:Exec) {
+    commandLine 'rmic', '-poa', '-iiop', '-d', "$buildDir/rmic/", '-classpath', "$buildDir/libs/*;$buildDir/rmi-dependencies/*", 'cyberwaste.kuzoff.iiop.server.RemoteDatabaseManagerImpl'
+}
+rmic.dependsOn assemble
+rmic.dependsOn rmiDependencies
+
+build.dependsOn rmic
+
 apply plugin:'application'
-mainClassName = "cyberwaste.kuzoff.rmi.server.RmiServerManager"
+startScripts {
+    mainClassName = 'cyberwaste.kuzoff.iiop.server.IIOPServerManager'
+    classpath.add(files { file("lib/rmic.jar") })
+    
+    doLast {
+        unixScript.text = unixScript.text.replace('DEFAULT_JVM_OPTS=""', 'DEFAULT_JVM_OPTS="-Djava.naming.factory.initial=com.sun.jndi.cosnaming.CNCtxFactory -Djava.naming.provider.url=iiop://localhost:1060"')
+    }
+}
+
+task rmiJar(type: Jar) {
+    from files { file("$buildDir/rmic") }
+    
+    destinationDir = file("$buildDir/install/$project.name/lib")
+    archiveName = 'rmic.jar'
+}
+rmiJar.dependsOn installApp
+rmiJar.dependsOn rmic
+
+task installRmiApp
+installRmiApp.dependsOn rmiJar
+
+task orbd(type:Exec) {
+    commandLine 'sh', 'src/main/scripts/orbd', '&'
+}
