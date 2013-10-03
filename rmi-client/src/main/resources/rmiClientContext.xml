@@ -13,7 +13,7 @@
         p:serviceUrl="rmi://localhost/DatabaseManager"
         p:serviceInterface="cyberwaste.kuzoff.core.DatabaseManager" />
         
-    <bean name="rmiClient" class="cyberwaste.kuzoff.client.rmi.RmiClientManager">
+    <bean name="rmiClient" class="cyberwaste.kuzoff.rmi.client.RmiClientManager">
         <property name="databaseManager" ref="databaseManager" />
     </bean>
     

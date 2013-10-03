@@ -8,3 +8,5 @@ bin/
 .gradle/
 build/
 
+# Runtime #
+iiop-server/orb.db

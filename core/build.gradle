@@ -22,7 +22,6 @@ sourceSets {
 dependencies {
     compile 'commons-io:commons-io:2.4'
     compile 'commons-lang:commons-lang:2.6'
-    compile 'org.springframework:spring-context:3.2.4.RELEASE'
     
     testCompile 'junit:junit:4.11'
 }
@@ -30,6 +29,3 @@ dependencies {
 repositories {
     mavenCentral()
 }
-
-apply plugin:'application'
-mainClassName = "cyberwaste.kuzoff.client.Client"

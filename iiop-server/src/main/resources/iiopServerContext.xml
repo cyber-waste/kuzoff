@@ -9,8 +9,12 @@
         
     <bean name="databaseManager" class="cyberwaste.kuzoff.core.impl.DatabaseManagerImpl" />
         
-    <bean name="shellClient" class="cyberwaste.kuzoff.shell.ShellManager">
-        <property name="databaseManager" ref="databaseManager" />
+    <bean name="remoteDatabaseManager" class="cyberwaste.kuzoff.iiop.server.RemoteDatabaseManagerImpl">
+        <property name="delegate" ref="databaseManager" />
+    </bean>
+        
+    <bean name="iiopServerManager" class="cyberwaste.kuzoff.iiop.server.IIOPServerManager">
+        <property name="remoteDatabaseManager" ref="remoteDatabaseManager" />
     </bean>
     
 </beans>
