@@ -1,6 +1,5 @@
 package cyberwaste.kuzoff.core.command;
 
-import java.io.IOException;
 import java.util.Map;
 
 import cyberwaste.kuzoff.core.DatabaseManager;

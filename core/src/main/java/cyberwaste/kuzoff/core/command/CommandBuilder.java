@@ -1,17 +1,12 @@
 package cyberwaste.kuzoff.core.command;
 
-import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import cyberwaste.kuzoff.core.DatabaseManager;
-import cyberwaste.kuzoff.core.CommandManager;
-import cyberwaste.kuzoff.core.domain.Row;
-import cyberwaste.kuzoff.core.domain.Table;
 
 public class CommandBuilder {
     
@@ -19,7 +14,7 @@ public class CommandBuilder {
     
     private DatabaseManager databaseManager;
     private Map<String, String> parameters;
-    private Map<String,Class> commands;
+    private Map<String, Class<?>> commands;
 
     public static CommandBuilder command(String commandName) {
         return new CommandBuilder(commandName);
@@ -27,7 +22,7 @@ public class CommandBuilder {
 
     private CommandBuilder(String commandName) {
         this.commandName = commandName;
-        commands = new HashMap<String, Class>();
+        commands = new HashMap<String, Class<?>>();
         commands.put("lstbl", CommandListTables.class);
         commands.put("mktbl", CommandMakeTable.class);
         commands.put("rwmtbl", CommandRemoveTable.class);
@@ -61,7 +56,7 @@ public class CommandBuilder {
         }
         
         if(commands.containsKey(commandName)){
-            Class commandClass = commands.get(commandName);
+            Class<?> commandClass = commands.get(commandName);
             Command command = (Command)commandClass.newInstance();
             command.setState(parameters, databaseManager);
             return command;
