@@ -20,6 +20,7 @@ import cyberwaste.kuzoff.core.domain.Table;
 import cyberwaste.kuzoff.core.domain.Type;
 import cyberwaste.kuzoff.core.impl.RemoteDatabaseManagerImpl;
 
+@Ignore
 public class DatabaseManagerTest {
     
     private RemoteDatabaseManagerImpl manager;
