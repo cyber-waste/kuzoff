@@ -18,15 +18,15 @@ import org.junit.Test;
 import cyberwaste.kuzoff.core.domain.Row;
 import cyberwaste.kuzoff.core.domain.Table;
 import cyberwaste.kuzoff.core.domain.Type;
-import cyberwaste.kuzoff.core.impl.DatabaseManagerImpl;
+import cyberwaste.kuzoff.core.impl.RemoteDatabaseManagerImpl;
 
 public class DatabaseManagerTest {
     
-    private DatabaseManagerImpl manager;
+    private RemoteDatabaseManagerImpl manager;
     
     @Before
     public void setUp() throws Exception {
-        manager = new DatabaseManagerImpl();
+        manager = new RemoteDatabaseManagerImpl();
         manager.forDatabaseFolder("/home/vlg/Documents/db_test");
         List<String> types = new ArrayList<String>();
         types.add("int"); types.add("char");

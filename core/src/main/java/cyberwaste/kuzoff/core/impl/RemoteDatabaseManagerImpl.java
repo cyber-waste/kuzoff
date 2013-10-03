@@ -7,12 +7,15 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import javax.rmi.PortableRemoteObject;
 
 import org.apache.commons.io.FileUtils;
 
@@ -22,13 +25,17 @@ import cyberwaste.kuzoff.core.domain.Table;
 import cyberwaste.kuzoff.core.domain.Type;
 import cyberwaste.kuzoff.core.domain.Value;
 
-public class DatabaseManagerImpl implements DatabaseManager {
+public class RemoteDatabaseManagerImpl extends PortableRemoteObject implements DatabaseManager {
     
     private static final String METADATA_FILE_NAME = "metadata";
     private static final String TABLE_FILE_NAME = "table";
     private static final String TABLE_FILE_NAME_TEMP = "table_temp";
     
     private File databaseFolder;
+    
+    public RemoteDatabaseManagerImpl() throws RemoteException {
+        super();
+    }
     
     @Override
     public void forDatabaseFolder(String databaseFolderName) {

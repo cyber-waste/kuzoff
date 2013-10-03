@@ -7,7 +7,7 @@ import org.omg.PortableServer.*;
 import java.util.*;
 import org.omg.CORBA.*;
 
-import cyberwaste.kuzoff.core.impl.DatabaseManagerImpl;
+import cyberwaste.kuzoff.core.impl.RemoteDatabaseManagerImpl;
 
 import javax.rmi.CORBA.Tie;
 import javax.rmi.CORBA.Util;
@@ -36,7 +36,7 @@ public RmiIIOPServerManager(String[] args) {
         
     tPOA.the_POAManager().activate();
 
-    DatabaseManagerImpl impl = new DatabaseManagerImpl();
+    RemoteDatabaseManagerImpl impl = new RemoteDatabaseManagerImpl();
     Tie tie = (Tie)Util.getTie( impl );
     String dbId = "db";
     byte[] id = dbId.getBytes();

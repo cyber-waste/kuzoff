@@ -1,0 +1,22 @@
+version = '0.0'
+
+apply plugin: 'java'
+sourceCompatibility = 1.6
+
+tasks.withType(Compile) {
+    options.encoding = 'UTF-8'
+}
+
+dependencies {
+    compile project(':core')
+    
+    compile 'com.martiansoftware:jsap:2.1'
+    compile 'org.springframework:spring-context:3.2.4.RELEASE'
+}
+
+repositories {
+    mavenCentral()
+}
+
+apply plugin:'application'
+mainClassName = "cyberwaste.kuzoff.shell.ShellManager"
