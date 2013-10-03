@@ -19,11 +19,11 @@ import com.martiansoftware.jsap.Parameter;
 import com.martiansoftware.jsap.SimpleJSAP;
 
 import cyberwaste.kuzoff.core.DatabaseManager;
-import cyberwaste.kuzoff.io.IOManager;
-import cyberwaste.kuzoff.io.command.Command;
-import cyberwaste.kuzoff.io.command.CommandBuilder;
+import cyberwaste.kuzoff.core.CommandManager;
+import cyberwaste.kuzoff.core.command.Command;
+import cyberwaste.kuzoff.core.command.CommandBuilder;
 
-public class ShellManager extends IOManager {
+public class ShellManager extends CommandManager {
     
     @SuppressWarnings("resource")
     public static void main(String[] args) throws Exception {

@@ -1,9 +1,9 @@
-package cyberwaste.kuzoff.io.command;
+package cyberwaste.kuzoff.core.command;
 
 import java.util.Map;
 
 import cyberwaste.kuzoff.core.DatabaseManager;
-import cyberwaste.kuzoff.io.IOManager;
+import cyberwaste.kuzoff.core.CommandManager;
 
 public class CommandUnknown implements Command {
 
@@ -16,7 +16,7 @@ public class CommandUnknown implements Command {
     }
     
     @Override
-    public void execute(IOManager ioManager) throws Exception {
+    public void execute(CommandManager ioManager) throws Exception {
                 throw new Exception("Unknown command");
     }
 

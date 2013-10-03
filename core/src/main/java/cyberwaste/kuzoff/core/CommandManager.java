@@ -1,16 +1,16 @@
-package cyberwaste.kuzoff.io;
+package cyberwaste.kuzoff.core;
 
 import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 
+import cyberwaste.kuzoff.core.command.Command;
 import cyberwaste.kuzoff.core.domain.Row;
 import cyberwaste.kuzoff.core.domain.Table;
 import cyberwaste.kuzoff.core.domain.Type;
 import cyberwaste.kuzoff.core.domain.Value;
-import cyberwaste.kuzoff.io.command.Command;
 
-public abstract class IOManager {
+public abstract class CommandManager {
     
     protected abstract Command getNextCommand() throws IOException;
     

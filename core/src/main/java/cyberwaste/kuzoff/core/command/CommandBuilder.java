@@ -1,4 +1,4 @@
-package cyberwaste.kuzoff.io.command;
+package cyberwaste.kuzoff.core.command;
 
 import java.io.IOException;
 import java.rmi.RemoteException;
@@ -9,9 +9,9 @@ import java.util.List;
 import java.util.Map;
 
 import cyberwaste.kuzoff.core.DatabaseManager;
+import cyberwaste.kuzoff.core.CommandManager;
 import cyberwaste.kuzoff.core.domain.Row;
 import cyberwaste.kuzoff.core.domain.Table;
-import cyberwaste.kuzoff.io.IOManager;
 
 public class CommandBuilder {
     

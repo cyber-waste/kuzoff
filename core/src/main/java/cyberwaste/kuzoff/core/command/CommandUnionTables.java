@@ -1,12 +1,12 @@
-package cyberwaste.kuzoff.io.command;
+package cyberwaste.kuzoff.core.command;
 
 import java.util.Map;
 import java.util.List;
 
 import cyberwaste.kuzoff.core.DatabaseManager;
+import cyberwaste.kuzoff.core.CommandManager;
 import cyberwaste.kuzoff.core.domain.Row;
 import cyberwaste.kuzoff.core.domain.Table;
-import cyberwaste.kuzoff.io.IOManager;
 
 public class CommandUnionTables implements Command {
 
@@ -19,7 +19,7 @@ public class CommandUnionTables implements Command {
     }
     
     @Override
-    public void execute(IOManager ioManager) throws Exception {
+    public void execute(CommandManager ioManager) throws Exception {
         final String tableName1 = CommandBuilder.getStringParameter(parameters, "name-1");
         final String tableName2 = CommandBuilder.getStringParameter(parameters, "name-2"); 
         Table newTable = databaseManager.unionTable(tableName1, tableName2);

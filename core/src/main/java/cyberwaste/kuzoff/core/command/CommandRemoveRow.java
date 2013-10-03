@@ -1,15 +1,13 @@
-package cyberwaste.kuzoff.io.command;
+package cyberwaste.kuzoff.core.command;
 
-import java.io.IOException;
 import java.util.Map;
 import java.util.List;
 
 import cyberwaste.kuzoff.core.DatabaseManager;
+import cyberwaste.kuzoff.core.CommandManager;
 import cyberwaste.kuzoff.core.domain.Row;
-import cyberwaste.kuzoff.core.domain.Table;
-import cyberwaste.kuzoff.io.IOManager;
 
-public class CommandShowTable implements Command {
+public class CommandRemoveRow implements Command {
 
     private Map<String,String> parameters;
     private DatabaseManager databaseManager;
@@ -20,11 +18,12 @@ public class CommandShowTable implements Command {
     }
     
     @Override
-    public void execute(IOManager ioManager ) throws Exception {
+    public void execute(CommandManager ioManager) throws Exception {
         final String tableName = CommandBuilder.getStringParameter(parameters, "name");
-        List<Row> tableData = databaseManager.loadTableData(tableName);
-        Table result = databaseManager.loadTable(tableName);
-        ioManager.outputTableData(result, tableData);
+        int numColumns = databaseManager.loadTable(tableName).columnTypes().size();
+        final Map<Integer,String> columnData = CommandBuilder.getMapParameter(parameters, "column", numColumns);
+        List<Row> rowList = databaseManager.removeRow(tableName,columnData);
+        ioManager.outputRowDeleted(rowList);
     }
 
 }

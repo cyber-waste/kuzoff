@@ -1,16 +1,15 @@
-package cyberwaste.kuzoff.io.command;
+package cyberwaste.kuzoff.core.command;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import cyberwaste.kuzoff.core.DatabaseManager;
-import cyberwaste.kuzoff.core.domain.Table;
-import cyberwaste.kuzoff.io.IOManager;
+import cyberwaste.kuzoff.core.CommandManager;
+import cyberwaste.kuzoff.core.domain.Row;
 
-public class CommandMakeTable implements Command {
-
+public class CommandAddRow implements Command {
+    
     private Map<String,String> parameters;
     private DatabaseManager databaseManager;
     
@@ -19,12 +18,11 @@ public class CommandMakeTable implements Command {
         this.parameters = parameters;
     }
     
-    @Override
-    public void execute(IOManager ioManager) throws Exception {
+    public void execute(CommandManager ioManager) throws Exception {
         final String tableName = CommandBuilder.getStringParameter(parameters, "name");
-        final List<String> columnTypes = CommandBuilder.getListParameter(parameters, "column");
-        Table result = databaseManager.createTable(tableName, columnTypes);
-        ioManager.outputTableCreated(result);
+        final List<String> columnData = CommandBuilder.getListParameter(parameters,"column");
+        Row new_row = databaseManager.addRow(tableName,columnData);
+        ioManager.outputRowAdded(new_row);
     }
 
 }

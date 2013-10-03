@@ -1,10 +1,10 @@
-package cyberwaste.kuzoff.io.command;
+package cyberwaste.kuzoff.core.command;
 
 import java.io.IOException;
 import java.util.Map;
 
 import cyberwaste.kuzoff.core.DatabaseManager;
-import cyberwaste.kuzoff.io.IOManager;
+import cyberwaste.kuzoff.core.CommandManager;
 
 public class CommandRemoveTable implements Command {
 
@@ -17,7 +17,7 @@ public class CommandRemoveTable implements Command {
     }
     
     @Override
-    public void execute(IOManager ioManager) throws Exception {
+    public void execute(CommandManager ioManager) throws Exception {
         final String tableName = CommandBuilder.getStringParameter(parameters, "name");
         databaseManager.removeTable(tableName);
         ioManager.outputTableRemoved(tableName);

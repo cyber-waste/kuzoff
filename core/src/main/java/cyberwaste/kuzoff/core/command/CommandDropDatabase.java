@@ -1,11 +1,11 @@
-package cyberwaste.kuzoff.io.command;
+package cyberwaste.kuzoff.core.command;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 import cyberwaste.kuzoff.core.DatabaseManager;
-import cyberwaste.kuzoff.io.IOManager;
+import cyberwaste.kuzoff.core.CommandManager;
 
 public class CommandDropDatabase implements Command {
 
@@ -18,7 +18,7 @@ public class CommandDropDatabase implements Command {
     }
     
     @Override
-    public void execute(IOManager ioManager ) throws Exception {
+    public void execute(CommandManager ioManager ) throws Exception {
         databaseManager.dropDatabase();
         ioManager.outputDatabaseDropped(databaseManager.getDatabaseName());
     }
