@@ -1,6 +1,5 @@
 package cyberwaste.kuzoff.core;
 
-import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 
@@ -12,7 +11,7 @@ import cyberwaste.kuzoff.core.domain.Value;
 
 public abstract class CommandManager {
     
-    protected abstract Command getNextCommand() throws IOException;
+    protected abstract Command getNextCommand() throws Exception;
     
     protected abstract boolean hasMoreCommands();
     

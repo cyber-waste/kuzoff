@@ -23,7 +23,7 @@ import cyberwaste.kuzoff.core.DatabaseManager;
 import cyberwaste.kuzoff.core.command.Command;
 import cyberwaste.kuzoff.core.command.CommandBuilder;
 
-public class ShellManager  extends CommandManager {
+public class ShellManager extends CommandManager {
     
     @SuppressWarnings("resource")
     public static void main(String[] args) throws Exception {
@@ -44,7 +44,7 @@ public class ShellManager  extends CommandManager {
     
     private boolean hasMoreCommands;
     
-    public ShellManager() throws JSAPException {
+    protected ShellManager() throws JSAPException {
         this.reader = new BufferedReader(new InputStreamReader(System.in));
         this.jsap = new SimpleJSAP(
             "kuzoff",
@@ -65,12 +65,8 @@ public class ShellManager  extends CommandManager {
         this.hasMoreCommands = true;
     }
     
-    void setDataBaseManager(DatabaseManager manager){
-        this.databaseManager = manager;
-    }
-    
     @Override
-    protected Command getNextCommand() throws IOException {
+    protected Command getNextCommand() throws Exception {
         String nextCommandAsString = reader.readLine();
         
         if (EXIT_COMMAND.equals(nextCommandAsString)) {
@@ -85,18 +81,14 @@ public class ShellManager  extends CommandManager {
             String commandName = result.getString(COMMAND_NAME_OPTION);
             Map<String, String> parameters = parseParameters(result.getString(PARAMETERS_OPTION, ""));
             
-            try {
-                return CommandBuilder
-                        .command(commandName)
-                        .usingDatabaseManager(databaseManager)
-                        .forDatabase(databaseFolder)
-                        .withParameters(parameters)
-                        .build();
-            } catch (Exception e) {
-                return null;
-            }
+            return CommandBuilder
+                    .command(commandName)
+                    .usingDatabaseManager(databaseManager)
+                    .forDatabase(databaseFolder)
+                    .withParameters(parameters)
+                    .build();
         } else {
-            throw new IOException("Wrong command syntax: " + nextCommandAsString);
+            throw new Exception("Wrong command syntax: " + nextCommandAsString);
         }
     }
 

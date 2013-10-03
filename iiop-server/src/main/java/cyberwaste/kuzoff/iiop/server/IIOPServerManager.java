@@ -49,7 +49,7 @@ public class IIOPServerManager {
         tPOA.activate_object_with_id(id, (Servant) tie);
             
         Context initialNamingContext = new InitialContext();
-        initialNamingContext.rebind("DatabaseService", tPOA.create_reference_with_id(id,((Servant) tie)._all_interfaces(tPOA,id)[0]) );
+        initialNamingContext.rebind("DatabaseService", tPOA.create_reference_with_id(id, ((Servant) tie)._all_interfaces(tPOA, id)[0]));
         System.out.println("Database Server: Ready...");
         
         orb.run();

@@ -57,23 +57,13 @@ public class CommandBuilder {
         
         if(commands.containsKey(commandName)){
             Class<?> commandClass = commands.get(commandName);
-            Command command = (Command)commandClass.newInstance();
+            Command command = (Command) commandClass.newInstance();
             command.setState(parameters, databaseManager);
             return command;
         }
         else{
             return new CommandUnknown();
         }
-        //if("lstbl")
-        //else if ("mktbl".equals(commandName)) {
-        //else if ("rmtbl".equals(commandName)) {      
-        //else if("addrw".equals(commandName)){        
-        //else if("rmvrw".equals(commandName)){
-        //else if("drpdb".equals(commandName)){
-        //else if("swtbl".equals(commandName)){
-        //else if("untbl".equals(commandName)){
-        //else if("dftbl".equals(commandName)){
-        //else if("uqtbl".equals(commandName)){
     }
 
     public static String getStringParameter(Map<String, String> parameters, String key) {
