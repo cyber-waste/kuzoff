@@ -1,0 +1,35 @@
+version = '0.0'
+
+apply plugin: 'java'
+sourceCompatibility = 1.6
+
+tasks.withType(Compile) {
+    options.encoding = 'UTF-8'
+}
+
+dependencies {
+    compile project(':core')
+    
+    compile 'org.springframework:spring-context:3.2.4.RELEASE'
+    compile 'org.springframework:spring-web:3.2.4.RELEASE'
+}
+
+repositories {
+    mavenCentral()
+}
+
+apply plugin: 'war'
+
+war {
+    archiveName 'kuzoff-ws.war'
+}
+
+task deploy(type:Exec) {
+    commandLine 'cmd', '/c', 'src\\build\\bat\\deploy.bat'
+}
+deploy.dependsOn build
+
+task start(type:Exec) {
+    commandLine 'cmd', '/c', 'src\\build\\bat\\start.bat'
+}
+start.dependsOn deploy
