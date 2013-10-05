@@ -28,11 +28,13 @@ public class DatabaseManagerImpl implements DatabaseManager {
     private static final String TABLE_FILE_NAME = "table";
     private static final String TABLE_FILE_NAME_TEMP = "table_temp";
     
+    private static final File KUZOFF_HOME = new File(System.getProperty("user.home"), "kuzoff");
+    
     private File databaseFolder;
     
     @Override
     public void forDatabaseFolder(String databaseFolderName) {
-        this.databaseFolder = new File(databaseFolderName);
+        this.databaseFolder = new File(KUZOFF_HOME, databaseFolderName);
         initDatabaseFolder(this.databaseFolder);
     }
 

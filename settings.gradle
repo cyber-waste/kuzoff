@@ -8,3 +8,4 @@ include 'rmi-server'
 include 'iiop-client'
 include 'iiop-server'
 
+include 'webservice-server'
