@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
@@ -34,7 +35,8 @@ public class WebServiceDatabaseManagerFacade implements DatabaseManager {
     }
 
     @Override
-    public Table loadTable(String tableName) throws IOException {
+    @RequestMapping(value="/table/{tableName}", method=RequestMethod.GET, produces="application/json")
+    public @ResponseBody Table loadTable(@PathVariable("tableName") String tableName) throws IOException {
         return delegate.loadTable(tableName);
     }
 
@@ -45,52 +47,67 @@ public class WebServiceDatabaseManagerFacade implements DatabaseManager {
     }
 
     @Override
-    public Table createTable(String tableName, List<String> columnTypes) throws IOException {
+    @RequestMapping(value="/table/{tableName}", method=RequestMethod.POST, produces="application/json")
+    @ResponseStatus(HttpStatus.CREATED)
+    public @ResponseBody Table createTable(@PathVariable("tableName") String tableName, @RequestParam("columnTypes") List<String> columnTypes) throws IOException {
         return delegate.createTable(tableName, columnTypes);
     }
 
     @Override
-    public void removeTable(String tableName) throws IOException {
+    @RequestMapping(value="/table/{tableName}", method=RequestMethod.DELETE)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void removeTable(@PathVariable("tableName") String tableName) throws IOException {
         delegate.removeTable(tableName);
     }
 
     @Override
-    public Row addRow(String tableName, List<String> columnData) throws Exception {
+    @RequestMapping(value="/table/{tableName}/data", method=RequestMethod.POST, produces="application/json")
+    @ResponseStatus(HttpStatus.CREATED)
+    public @ResponseBody Row addRow(@PathVariable("tableName") String tableName, @RequestParam("columnData") List<String> columnData) throws Exception {
         return delegate.addRow(tableName, columnData);
     }
 
     @Override
-    public List<Row> removeRow(String tableName, Map<Integer, String> columnData) throws Exception {
+    @RequestMapping(value="/table/{tableName}/data", method=RequestMethod.DELETE, produces="application/json")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public @ResponseBody List<Row> removeRow(@PathVariable("tableName") String tableName, @RequestParam("columnData") Map<Integer, String> columnData) throws Exception {
         return delegate.removeRow(tableName, columnData);
     }
 
     @Override
+    @RequestMapping(value="/database", method=RequestMethod.DELETE)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void dropDatabase() throws IOException {
         delegate.dropDatabase();
     }
 
     @Override
-    public String getDatabaseName() throws RemoteException {
+    @RequestMapping(value="/database", method=RequestMethod.GET, produces="application/json")
+    public @ResponseBody String getDatabaseName() throws RemoteException {
         return delegate.getDatabaseName();
     }
 
     @Override
-    public List<Row> loadTableData(String tableName) throws IOException {
+    @RequestMapping(value="/table/{tableName}/data", method=RequestMethod.GET, produces="application/json")
+    public @ResponseBody List<Row> loadTableData(@PathVariable("tableName") String tableName) throws IOException {
         return delegate.loadTableData(tableName);
     }
 
     @Override
-    public Table unionTable(String tableName1, String tableName2) throws Exception {
+    @RequestMapping(value="/table/{tableName1}/union/{tableName2}", method=RequestMethod.GET, produces="application/json")
+    public @ResponseBody Table unionTable(@PathVariable("tableName1") String tableName1, @PathVariable("tableName2") String tableName2) throws Exception {
         return delegate.unionTable(tableName1, tableName2);
     }
 
     @Override
-    public Table differenceTable(String tableName1, String tableName2) throws Exception {
+    @RequestMapping(value="/table/{tableName1}/difference/{tableName2}", method=RequestMethod.GET, produces="application/json")
+    public @ResponseBody Table differenceTable(@PathVariable("tableName1") String tableName1, @PathVariable("tableName2") String tableName2) throws Exception {
         return delegate.differenceTable(tableName1, tableName2);
     }
 
     @Override
-    public Table uniqueTable(String tableName) throws Exception {
+    @RequestMapping(value="/table/{tableName}/unique", method=RequestMethod.GET, produces="application/json")
+    public @ResponseBody Table uniqueTable(@PathVariable("tableName") String tableName) throws Exception {
         return delegate.uniqueTable(tableName);
     }
     

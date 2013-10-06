@@ -9,20 +9,24 @@ public class Value implements Serializable {
     
     private static final long serialVersionUID = 1L;
     
-    private String val;
+    private String value;
     private Type type;
     
     public Value(String val,Type type){
-        this.val = val;
+        this.value = val;
         this.type = type;
     }
     
     public String getValue(){
-        return type.getValue(val);
+        return type.getValue(value);
     }
     
     public String getData(){
-        return val;
+        return value;
+    }
+    
+    public Type getType() {
+        return type;
     }
     
     @Override
@@ -35,7 +39,7 @@ public class Value implements Serializable {
         Value other = (Value) obj;
         
         EqualsBuilder equalsBuilder = new EqualsBuilder();
-        equalsBuilder.append(this.val, other.val);
+        equalsBuilder.append(this.value, other.value);
         
         return equalsBuilder.isEquals();
     }
@@ -43,7 +47,7 @@ public class Value implements Serializable {
     @Override
     public int hashCode() {
         HashCodeBuilder hashCodeBuilder = new HashCodeBuilder();
-        hashCodeBuilder.append(val);
+        hashCodeBuilder.append(value);
         
         return hashCodeBuilder.toHashCode();
     }

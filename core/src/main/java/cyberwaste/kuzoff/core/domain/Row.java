@@ -24,6 +24,10 @@ public class Row implements Serializable {
         return row.get(index);
     }
     
+    public List<Value> getRow() {
+        return row;
+    }
+    
     public String toString(){
         StringBuilder builder = new StringBuilder();
         for(int i=0;i<row.size();i++){
