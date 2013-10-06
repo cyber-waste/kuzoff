@@ -22,7 +22,7 @@ public class CommandUniqueTable implements Command {
     public void execute(CommandManager ioManager) throws Exception {
         final String tableName = CommandBuilder.getStringParameter(parameters, "name");
         Table newTable = databaseManager.uniqueTable(tableName);
-        List<Row> tableData = databaseManager.loadTableData(newTable.name());
+        List<Row> tableData = databaseManager.loadTableData(newTable.getName());
         ioManager.outputTableData(newTable, tableData);
     }
 

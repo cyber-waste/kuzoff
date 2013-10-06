@@ -16,11 +16,11 @@ public class Table implements Serializable {
         this.columnTypes = Collections.unmodifiableList(columnTypes);
     }
     
-    public String name() {
+    public String getName() {
         return name;
     }
 
-    public List<Type> columnTypes() {
+    public List<Type> getColumnTypes() {
         return columnTypes;
     }
 }

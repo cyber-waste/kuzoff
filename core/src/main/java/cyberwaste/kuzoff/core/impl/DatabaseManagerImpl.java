@@ -67,7 +67,7 @@ public class DatabaseManagerImpl implements DatabaseManager {
             if (metadata.length() > 0) {
                 metadata.append("|");
             }
-            metadata.append(columnType.name());
+            metadata.append(columnType.getName());
         }
         
         File metadataFile = new File(tableDirectory, METADATA_FILE_NAME);
@@ -79,10 +79,10 @@ public class DatabaseManagerImpl implements DatabaseManager {
     @Override
     public Row addRow(String tableName, List<String> columnData) throws Exception {
         Table table = loadTable(tableName);
-        if(table.columnTypes().size() != columnData.size()){
+        if(table.getColumnTypes().size() != columnData.size()){
             throw new Exception("Type of row is not valid");
         }
-        List<Type> types = table.columnTypes();
+        List<Type> types = table.getColumnTypes();
         for(int i=0;i<columnData.size();i++){
             if(!types.get(i).isValid(columnData.get(i))){
                 throw new Exception("Type of row is not valid");
@@ -102,7 +102,7 @@ public class DatabaseManagerImpl implements DatabaseManager {
     public List<Row> removeRow(String tableName, Map<Integer,String> columnData) throws Exception {
         
         Table table = loadTable(tableName);
-        List<Type> types = table.columnTypes();
+        List<Type> types = table.getColumnTypes();
         for(int curKey : columnData.keySet()){
             Type curType = types.get(curKey-1);
             if(!curType.isValid(columnData.get(curKey))){
@@ -183,7 +183,7 @@ public class DatabaseManagerImpl implements DatabaseManager {
         List<Row> result = new ArrayList<Row>();
         
         Table table = loadTable(tableName);
-        List<Type> types = table.columnTypes();
+        List<Type> types = table.getColumnTypes();
         File tableFile = new File(new File(databaseFolder,tableName), TABLE_FILE_NAME);
         BufferedReader reader = new BufferedReader(new FileReader(tableFile));
         
@@ -212,19 +212,19 @@ public class DatabaseManagerImpl implements DatabaseManager {
         Table table1 = loadTable(tableName1);
         Table table2 = loadTable(tableName2);
     
-        List<Type> types1 = table1.columnTypes();
-        List<Type> types2 = table2.columnTypes();
+        List<Type> types1 = table1.getColumnTypes();
+        List<Type> types2 = table2.getColumnTypes();
         if(types1.size() != types2.size()){
             throw new Exception("Tables have defferent schemes");
         }
         
         for(int i=0;i<types1.size();i++){
-            if(!types1.get(i).name().equals(types2.get(i).name())){
+            if(!types1.get(i).getName().equals(types2.get(i).getName())){
                 throw new Exception("Tables have different schemes");
             }
         }
         List<String> typeNames = new ArrayList<String>();
-        for(int i=0;i<types1.size();i++) typeNames.add(types1.get(i).name());
+        for(int i=0;i<types1.size();i++) typeNames.add(types1.get(i).getName());
         
         String newTableName = tableName1+"-"+tableName2+"-union";
         Table newTable = createTable(newTableName, typeNames);
@@ -247,19 +247,19 @@ public class DatabaseManagerImpl implements DatabaseManager {
         Table table1 = loadTable(tableName1);
         Table table2 = loadTable(tableName2);
     
-        List<Type> types1 = table1.columnTypes();
-        List<Type> types2 = table2.columnTypes();
+        List<Type> types1 = table1.getColumnTypes();
+        List<Type> types2 = table2.getColumnTypes();
         if(types1.size() != types2.size()){
             throw new Exception("Tables have defferent schemes");
         }
         
         for(int i=0;i<types1.size();i++){
-            if(!types1.get(i).name().equals(types2.get(i).name())){
+            if(!types1.get(i).getName().equals(types2.get(i).getName())){
                 throw new Exception("Tables have different schemes");
             }
         }
         List<String> typeNames = new ArrayList<String>();
-        for(int i=0;i<types1.size();i++) typeNames.add(types1.get(i).name());
+        for(int i=0;i<types1.size();i++) typeNames.add(types1.get(i).getName());
         
         String newTableName = tableName1+"-"+tableName2+"-difference";
         Table newTable = createTable(newTableName, typeNames);
@@ -280,10 +280,10 @@ public class DatabaseManagerImpl implements DatabaseManager {
     @Override
     public Table uniqueTable(String tableName) throws Exception {
         Table table = loadTable(tableName);
-        List<Type> types = table.columnTypes();
+        List<Type> types = table.getColumnTypes();
         
         List<String> typeNames = new ArrayList<String>();
-        for(int i=0;i<types.size();i++) typeNames.add(types.get(i).name());
+        for(int i=0;i<types.size();i++) typeNames.add(types.get(i).getName());
         
         String newTableName = tableName+"-unique";
         Table newTable = createTable(newTableName, typeNames);

@@ -7,8 +7,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import cyberwaste.kuzoff.core.DatabaseManager;
 import cyberwaste.kuzoff.core.domain.Row;
@@ -22,7 +27,9 @@ public class WebServiceDatabaseManagerFacade implements DatabaseManager {
     private DatabaseManager delegate;
     
     @Override
-    public void forDatabaseFolder(String databaseFolder) throws RemoteException {
+    @RequestMapping(value="/database/{databaseFolder}", method=RequestMethod.POST)
+    @ResponseStatus(HttpStatus.FOUND)
+    public void forDatabaseFolder(@PathVariable("databaseFolder") String databaseFolder) throws RemoteException {
         delegate.forDatabaseFolder(databaseFolder);
     }
 
@@ -32,7 +39,8 @@ public class WebServiceDatabaseManagerFacade implements DatabaseManager {
     }
 
     @Override
-    public Collection<Table> listTables() throws IOException {
+    @RequestMapping(value="/table", method=RequestMethod.GET, produces="application/json")
+    public @ResponseBody Collection<Table> listTables() throws IOException {
         return delegate.listTables();
     }
 

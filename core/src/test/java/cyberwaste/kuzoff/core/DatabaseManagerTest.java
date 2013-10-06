@@ -64,15 +64,15 @@ public class DatabaseManagerTest {
         assertEquals(2, tables.size());
         Iterator<Table> it = tables.iterator();
         Table table = it.next();
-        assertEquals(table.name(), "table2");
-        List<Type> types = table.columnTypes();
+        assertEquals(table.getName(), "table2");
+        List<Type> types = table.getColumnTypes();
         for(int i=0;i<types.size();i++){
-            assertEquals(types.get(i).name(),typeNames[i]);
+            assertEquals(types.get(i).getName(),typeNames[i]);
         }
         table = it.next();
-        assertEquals(table.name(), "table1");
+        assertEquals(table.getName(), "table1");
         for(int i=0;i<types.size();i++){
-            assertEquals(types.get(i).name(),typeNames[i]);
+            assertEquals(types.get(i).getName(),typeNames[i]);
         }
     }
     
@@ -107,11 +107,11 @@ public class DatabaseManagerTest {
     @Test
     public void unionTablesTest() throws Exception{
         Table unionTable = manager.unionTable("table1", "table2");
-        List<Row> rows = manager.loadTableData(unionTable.name());
+        List<Row> rows = manager.loadTableData(unionTable.getName());
         assertEquals(3, rows.size());
         String[][] rowDataActual = {{"10","a"},{"20","b"},{"30","c"}};
         for(int i=0;i<rows.size();i++){
-            for(int j=0;j<unionTable.columnTypes().size();j++){
+            for(int j=0;j<unionTable.getColumnTypes().size();j++){
                 assertEquals(rowDataActual[i][j], rows.get(i).getElement(j).getValue());
             }
         }
@@ -120,11 +120,11 @@ public class DatabaseManagerTest {
     @Test
     public void differenceTableTest() throws Exception{
         Table differenceTable = manager.differenceTable("table1", "table2");
-        List<Row> rows = manager.loadTableData(differenceTable.name());
+        List<Row> rows = manager.loadTableData(differenceTable.getName());
         assertEquals(1, rows.size());
         Row row = rows.get(0);
         String[] rowDataActual = {"10","a"};
-        for(int i=0;i<differenceTable.columnTypes().size();i++){
+        for(int i=0;i<differenceTable.getColumnTypes().size();i++){
             assertEquals(rowDataActual[i], row.getElement(i).getValue());
         }
     }
@@ -132,11 +132,11 @@ public class DatabaseManagerTest {
     @Test
     public void uniqueTableTest() throws Exception{
         Table uniqueTable = manager.uniqueTable("table2");
-        List<Row> rows = manager.loadTableData(uniqueTable.name());
+        List<Row> rows = manager.loadTableData(uniqueTable.getName());
         assertEquals(2, rows.size());
         String[][] rowDataActual = {{"20","b"},{"30","c"}};
         for(int i=0;i<rows.size();i++){
-            for(int j=0;j<uniqueTable.columnTypes().size();j++){
+            for(int j=0;j<uniqueTable.getColumnTypes().size();j++){
                 assertEquals(rowDataActual[i][j], rows.get(i).getElement(j).getValue());
             }
         }

@@ -20,7 +20,7 @@ public class CommandRemoveRow implements Command {
     @Override
     public void execute(CommandManager ioManager) throws Exception {
         final String tableName = CommandBuilder.getStringParameter(parameters, "name");
-        int numColumns = databaseManager.loadTable(tableName).columnTypes().size();
+        int numColumns = databaseManager.loadTable(tableName).getColumnTypes().size();
         final Map<Integer,String> columnData = CommandBuilder.getMapParameter(parameters, "column", numColumns);
         List<Row> rowList = databaseManager.removeRow(tableName,columnData);
         ioManager.outputRowDeleted(rowList);

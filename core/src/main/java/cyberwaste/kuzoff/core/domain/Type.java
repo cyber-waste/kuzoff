@@ -11,10 +11,6 @@ public abstract class Type implements Serializable {
     public Type(String name) {
         this.name = name;
     }
-
-    public String name() {
-        return name;
-    }
     
     public static Type createType(String name){
         if("char".equals(name)) return new TypeChar(name);
@@ -23,6 +19,10 @@ public abstract class Type implements Serializable {
         else if("textfile".equals(name)) return new TypeTextFile(name);
         else if("intinterval".equals(name)) return new TypeIntInterval(name);
         else return null;
+    }
+
+    public String getName() {
+        return name;
     }
     
     public abstract boolean isValid(String val);

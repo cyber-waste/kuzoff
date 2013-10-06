@@ -66,7 +66,7 @@ public abstract class CommandManager {
     }
 
     public void outputTableData(Table table, List<Row> tableData) {
-        outputMessage("Table " + table.name() + " - " + tableData.size() + " row(s):");
+        outputMessage("Table " + table.getName() + " - " + tableData.size() + " row(s):");
         for (Row row : tableData) {
             outputRow(row);
         }
@@ -74,17 +74,17 @@ public abstract class CommandManager {
     
     public void outputTableInfo(Table table) {
         StringBuilder tableInfo = new StringBuilder();
-        tableInfo.append("table ").append(table.name()).append(" (");
+        tableInfo.append("table ").append(table.getName()).append(" (");
         
         boolean needComaBefore = false;
-        for (Type columnType : table.columnTypes()) {
+        for (Type columnType : table.getColumnTypes()) {
             if (needComaBefore) {
                 tableInfo.append(", ");
             } else {
                 needComaBefore = true;
             }
             
-            tableInfo.append(columnType.name());
+            tableInfo.append(columnType.getName());
         }
         
         tableInfo.append(")");

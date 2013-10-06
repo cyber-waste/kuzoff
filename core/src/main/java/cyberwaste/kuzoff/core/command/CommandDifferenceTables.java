@@ -23,7 +23,7 @@ public class CommandDifferenceTables implements Command {
         final String tableName1 = CommandBuilder.getStringParameter(parameters, "name-1");
         final String tableName2 = CommandBuilder.getStringParameter(parameters, "name-2");
         Table newTable = databaseManager.differenceTable(tableName1, tableName2);
-        List<Row> tableData = databaseManager.loadTableData(newTable.name());
+        List<Row> tableData = databaseManager.loadTableData(newTable.getName());
         ioManager.outputTableData(newTable, tableData);
 
     }
