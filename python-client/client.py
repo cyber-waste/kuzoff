@@ -1,13 +1,17 @@
-from httplib2 import Http
+import httplib2
 import json
+import urllib
 
 h = httplib2.Http()
-host = 'http://localhost/'
+host = 'http://localhost:8080/kuzoff-ws/api/'
 db = 'db'
 
 def setDatabaseName(name) :
     global db
     db = name
+    resp, content = h.request(host + 'database/' + name, "POST", parseParameters(''))
+    print resp
+    print content
 
 def setHost(hostName) :
     global host
@@ -15,6 +19,8 @@ def setHost(hostName) :
     
 def parseParameters(data) :
     res = {}
+    if data == '' :
+        return json.dumps(res)
     pairs = data.split(';')
     for pair in pairs :
         param = pair.split('=')
@@ -22,43 +28,54 @@ def parseParameters(data) :
     return json.dumps(res)
 
 def listTables()  :  
-    resp, content = h.request(host + db + "/listtables", "GET")
+    resp, content = h.request(host + "table", "GET")
+    print resp
     print content
-
-def makeTable(data):
-    resp, content = h.request(host + db + "/maketable", "POST", parseParameters(data))
+    
+def makeTable(name,data):
+    resp, content = h.request(host + "table/" + name + '?' + urllib.urlencode({"columnTypes" : data}), "POST", '')
+    print resp
     print content
     
 def removeTable(name) :
-    resp, content = h.request(host + db + "/removetable", "POST", parseParameters(data))
+    resp, content = h.request(host + "table/" + name , "DELETE", '')
+    print resp
     print content
     
-def addRow(data) :
-    resp, content = h.request(host + db + "/addrow", "POST", parseParameters(data))
+def addRow(name,data) :
+    resp, content = h.request(host  + "table/" + name + '/data' + '?' +  urllib.urlencode({"columnData" : data}) , "POST", '')
+    print resp
     print content
     
-def removeRow(data) :
-    resp, content = h.request(host + db + "/removerow", "POST", parseParameters(data))
+# not working
+def removeRow(name,data) :
+    resp, content = h.request(host  + "table/" + name + '/data' + '?' +  urllib.urlencode({"columnData" : {'1':'3'}}), "DELETE", '')
+    print resp
     print content
     
 def dropDatabase() :
-    resp, content = h.request(host + db + "/dropdatabase", "POST", parseParameters(data))
+    resp, content = h.request(host +  "/database", "DELETE", '')
+    print resp
     print content
     
 def showTable(name) :
-    resp, content = h.request(host +db + "/showtable", "GET")
+    resp, content = h.request(host + "table/" + name + '/data', "GET")
+    print resp
     print content
     
-def unionTables(data) :
-    resp, content = h.request(host + db + "/uniontables", "POST", parseParameters(data))
+def unionTables(name1,name2) :
+    resp, content = h.request(host + "table/" + name1 + '/union/' + name2, "GET")
+    print resp
     print content
     
-def differenceTables(data) :
-    resp, content = h.request(host + db + "/differencetables", "POST", parseParameters(data))
+def differenceTables(name1,name2) :
+    resp, content = h.request(host + "table/" + name1 + '/difference/' + name2, "GET")
+    print resp
     print content
     
-def uniqueTable(data) :
-    resp, content = h.request(host + db + "/uniquetable", "POST", parseParameters(data))
+def uniqueTable(name) :
+    resp, content = h.request(host + "table/" + name1 + '/unique', "GET")
+    print resp
     print content
 
 
