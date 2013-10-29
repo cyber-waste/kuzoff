@@ -1,39 +1,30 @@
 import httplib2
 import json
 import urllib
+from optparse import OptionParser
+from AptUrl.Parser import parse
 
 h = httplib2.Http()
 host = 'http://localhost:8080/kuzoff-ws/api/'
-db = 'db'
-
-def setDatabaseName(name) :
-    global db
-    db = name
-    resp, content = h.request(host + 'database/' + name, "POST", parseParameters(''))
-    print resp
-    print content
 
 def setHost(hostName) :
     global host
     host = hostName
-    
-def parseParameters(data) :
-    res = {}
-    if data == '' :
-        return json.dumps(res)
-    pairs = data.split(';')
-    for pair in pairs :
-        param = pair.split('=')
-        res[param[0]] = param[1]
-    return json.dumps(res)
 
+
+def setDatabaseName(name) :
+    resp, content = h.request(host + 'database/' + name, "POST", '')
+    print resp
+    print content
+    
 def listTables()  :  
     resp, content = h.request(host + "table", "GET")
     print resp
     print content
     
-def makeTable(name,data):
-    resp, content = h.request(host + "table/" + name + '?' + urllib.urlencode({"columnTypes" : data}), "POST", '')
+def makeTable(data):
+    name,rest = data[0], ','.join(data[1:])
+    resp, content = h.request(host + "table/" + name + '?' + urllib.urlencode({"columnTypes" : rest}), "POST", '')
     print resp
     print content
     
@@ -42,8 +33,9 @@ def removeTable(name) :
     print resp
     print content
     
-def addRow(name,data) :
-    resp, content = h.request(host  + "table/" + name + '/data' + '?' +  urllib.urlencode({"columnData" : data}) , "POST", '')
+def addRow(data) :
+    name,rest = data[0], ','.join(data[1:])
+    resp, content = h.request(host  + "table/" + name + '/data' + '?' +  urllib.urlencode({"columnData" : rest}) , "POST", '')
     print resp
     print content
     
@@ -63,12 +55,14 @@ def showTable(name) :
     print resp
     print content
     
-def unionTables(name1,name2) :
+def unionTables(data) :
+    name1,name2 = data[0],data[1]
     resp, content = h.request(host + "table/" + name1 + '/union/' + name2, "GET")
     print resp
     print content
     
-def differenceTables(name1,name2) :
+def differenceTables(data) :
+    name1,name2 = data[0],data[1]
     resp, content = h.request(host + "table/" + name1 + '/difference/' + name2, "GET")
     print resp
     print content
@@ -78,4 +72,39 @@ def uniqueTable(name) :
     print resp
     print content
 
+methods = {
+           "lstbl" : listTables,
+           "mktbl" : makeTable,
+           "rmtbl" : removeTable,
+           "addrw" : addRow,
+           "rmvrw" : removeRow,
+           "drpdb" : dropDatabase,
+           "swtbl" : showTable,
+           "untbl" : unionTables,
+           "dftbl" : differenceTables,
+           "uqtbl" : uniqueTable
+    }
 
+parser = OptionParser()
+parser.add_option('-d',"--directory", action="store", type="string", dest="directory")
+parser.add_option('-c','--command',action='store',type='string',dest='command')
+parser.add_option('-p','--parameters',action='store',type='string',dest='parameters')
+
+print "Shell started..."
+line = raw_input()
+while line != 'exit'  : 
+    (option,_) = parser.parse_args(line.split(' '))
+    if option.directory is None or option.command is None :
+        print "Wrong command format"
+        line = raw_input()
+        continue
+    setDatabaseName(option.directory)
+    method = methods[option.command]
+    if option.parameters is None : method()
+    else :
+        l = option.parameters.split(';')
+        if len(l) == 1 :
+            method(l[0].split('=')[1])
+        else :
+            method([x.split('=')[1] for x in l])
+    line = raw_input()
