@@ -1,0 +1,93 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_weight="1">
+        
+	    <TextView
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:text="Choose operation for creating table"
+	        android:textAppearance="?android:attr/textAppearanceMedium" />
+	    
+	    <RadioGroup
+	        android:id="@+id/radioGroup"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content" >
+	
+	        <RadioButton
+	            android:id="@+id/radioUnion"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:onClick="onRadioClick"
+	            android:text="Union" />
+	
+	        <RadioButton
+	            android:id="@+id/radioDifference"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:onClick="onRadioClick"
+	            android:text="Difference" />
+	
+	        <RadioButton
+	            android:id="@+id/radioUnique"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:onClick="onRadioClick"
+	            android:text="Unique" />
+	
+	    </RadioGroup>
+	    
+	   
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="First table name"
+	        android:textAppearance="?android:attr/textAppearanceMedium" />
+		 
+		<EditText 
+		    android:id="@+id/table1"
+		    android:layout_width="match_parent"
+		    android:layout_height="wrap_content"
+		    android:hint="@string/edit_message" />
+	
+		<TextView
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="Second table name"
+	        android:textAppearance="?android:attr/textAppearanceMedium" />
+	     
+	    <EditText 
+	        android:id="@+id/table2"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:hint="@string/edit_message" />
+	    
+	    <TextView
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="Result table name"
+	        android:textAppearance="?android:attr/textAppearanceMedium" />
+	     
+	    <EditText 
+	        android:id="@+id/result_table"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:hint="@string/edit_message" />
+
+    </LinearLayout>
+    
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="onOkClick"
+        android:text="OK" />
+    
+</LinearLayout>

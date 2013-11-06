@@ -1,0 +1,62 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    
+    
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:padding="5dip"  >
+        
+	    <TableLayout
+	        android:id="@+id/spreadsheet"
+	        android:background="#000000"
+	        android:layout_width="match_parent"
+	        android:layout_height="0dip" 
+	        android:layout_weight="1" 
+	        android:shrinkColumns="*"  
+	        android:stretchColumns="*" >
+	        
+	    </TableLayout>
+	    
+    </ScrollView>
+    
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+        
+        <Button
+            android:layout_weight="1"
+	        android:layout_width="wrap_content" 
+	        android:layout_height="wrap_content"
+	        android:text="@string/create_table"
+	        android:onClick="createTable"
+	    />
+        
+        <Button
+            android:layout_weight="1"
+            android:layout_width="wrap_content" 
+            android:layout_height="wrap_content"
+            android:text="@string/list_tables"
+            android:onClick="listTables"
+        />
+        
+        <Button
+            android:id="@+id/add_row_button"
+            android:layout_weight="1"
+            android:layout_width="wrap_content" 
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:text="@string/add_row"
+            android:onClick="addRow"
+        />
+        
+    </LinearLayout>
+
+    
+    
+</LinearLayout>
