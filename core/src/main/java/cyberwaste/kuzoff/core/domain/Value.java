@@ -10,23 +10,34 @@ public class Value implements Serializable {
     private static final long serialVersionUID = 1L;
     
     private String value;
-    private Type type;
+    private String typeName;
     
-    public Value(String val,Type type){
+    public Value() {
+    }
+    
+    public Value(String val, Type type){
         this.value = val;
-        this.type = type;
+        this.typeName = type.getName();
+    }
+    
+    public String getTypeName() {
+        return typeName;
+    }
+    
+    public void setTypeName(String typeName) {
+        this.typeName = typeName;
+    }
+    
+    public void setValue(String value) {
+        this.value = value;
     }
     
     public String getValue(){
-        return type.getValue(value);
+        return Type.createType(typeName).getValue(value);
     }
     
-    public String getData(){
+    public String data(){
         return value;
-    }
-    
-    public Type getType() {
-        return type;
     }
     
     @Override

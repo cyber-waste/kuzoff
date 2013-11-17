@@ -77,7 +77,7 @@ public abstract class CommandManager {
         tableInfo.append("table ").append(table.getName()).append(" (");
         
         boolean needComaBefore = false;
-        for (Type columnType : table.getColumnTypes()) {
+        for (Type columnType : table.columnTypes()) {
             if (needComaBefore) {
                 tableInfo.append(", ");
             } else {
@@ -116,5 +116,6 @@ public abstract class CommandManager {
     
     private void outputError(Exception e) {
         outputMessage("ERROR: "+ e.getMessage());
+        e.printStackTrace();
     }
 }

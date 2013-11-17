@@ -9,3 +9,4 @@ include 'iiop-client'
 include 'iiop-server'
 
 include 'webservice-server'
+include 'webservice-client'

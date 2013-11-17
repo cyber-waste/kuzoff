@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 import javax.rmi.PortableRemoteObject;
 
@@ -51,7 +50,7 @@ public class RemoteDatabaseManagerImpl extends PortableRemoteObject implements D
     }
 
     @Override
-    public List<Row> removeRow(String tableName, Map<Integer, String> columnData) throws Exception {
+    public List<Row> removeRow(String tableName, List<String> columnData) throws Exception {
         return delegate.removeRow(tableName, columnData);
     }
 

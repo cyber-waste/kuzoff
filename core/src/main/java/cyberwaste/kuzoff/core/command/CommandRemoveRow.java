@@ -1,5 +1,7 @@
 package cyberwaste.kuzoff.core.command;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.List;
 
@@ -20,8 +22,13 @@ public class CommandRemoveRow implements Command {
     @Override
     public void execute(CommandManager ioManager) throws Exception {
         final String tableName = CommandBuilder.getStringParameter(parameters, "name");
-        int numColumns = databaseManager.loadTable(tableName).getColumnTypes().size();
-        final Map<Integer,String> columnData = CommandBuilder.getMapParameter(parameters, "column", numColumns);
+        int numColumns = databaseManager.loadTable(tableName).columnTypes().size();
+        final Map<Integer,String> columnDataMap = CommandBuilder.getMapParameter(parameters, "column", numColumns);
+        ArrayList<String> columnData = new ArrayList<String>(numColumns);
+        columnData.addAll(Arrays.asList(new String[numColumns+1]));
+        for (Integer key : columnDataMap.keySet()) {
+            columnData.set(key, columnDataMap.get(key));
+        }
         List<Row> rowList = databaseManager.removeRow(tableName,columnData);
         ioManager.outputRowDeleted(rowList);
     }

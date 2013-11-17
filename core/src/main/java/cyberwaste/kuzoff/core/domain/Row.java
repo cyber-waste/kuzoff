@@ -12,6 +12,9 @@ public class Row implements Serializable {
     
     private List<Value> row;
     
+    public Row() {
+    }
+    
     public Row(List<Value> row){
         this.row = row;
     }
@@ -26,6 +29,10 @@ public class Row implements Serializable {
     
     public List<Value> getRow() {
         return row;
+    }
+    
+    public void setRow(List<Value> row) {
+        this.row = row;
     }
     
     public String toString(){

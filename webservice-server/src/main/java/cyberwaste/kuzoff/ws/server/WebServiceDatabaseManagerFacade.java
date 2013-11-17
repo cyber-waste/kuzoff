@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -70,7 +69,7 @@ public class WebServiceDatabaseManagerFacade implements DatabaseManager {
     @Override
     @RequestMapping(value="/table/{tableName}/data", method=RequestMethod.DELETE, produces="application/json")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public @ResponseBody List<Row> removeRow(@PathVariable("tableName") String tableName, @RequestParam("columnData") Map<Integer, String> columnData) throws Exception {
+    public @ResponseBody List<Row> removeRow(@PathVariable("tableName") String tableName, @RequestParam("columnData") List<String> columnData) throws Exception {
         return delegate.removeRow(tableName, columnData);
     }
 

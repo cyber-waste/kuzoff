@@ -5,7 +5,6 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 import cyberwaste.kuzoff.core.domain.Row;
 import cyberwaste.kuzoff.core.domain.Table;
@@ -24,7 +23,7 @@ public interface DatabaseManager extends Remote {
 
     Row addRow(String tableName, List<String> columnData) throws Exception;
 
-    List<Row> removeRow(String tableName, Map<Integer, String> columnData) throws Exception;
+    List<Row> removeRow(String tableName, List<String> columnData) throws Exception;
 
     void dropDatabase() throws IOException;
 

@@ -8,13 +8,14 @@ import java.io.FileWriter;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.StringUtils;
 
 import cyberwaste.kuzoff.core.DatabaseManager;
 import cyberwaste.kuzoff.core.domain.Row;
@@ -73,16 +74,16 @@ public class DatabaseManagerImpl implements DatabaseManager {
         File metadataFile = new File(tableDirectory, METADATA_FILE_NAME);
         FileUtils.writeStringToFile(metadataFile, metadata.toString());
         
-        return new Table(tableName, columnTypes);
+        return new Table(tableName, columnTypeNames);
     }
     
     @Override
     public Row addRow(String tableName, List<String> columnData) throws Exception {
         Table table = loadTable(tableName);
-        if(table.getColumnTypes().size() != columnData.size()){
+        if(table.columnTypes().size() != columnData.size()){
             throw new Exception("Type of row is not valid");
         }
-        List<Type> types = table.getColumnTypes();
+        List<Type> types = table.columnTypes();
         for(int i=0;i<columnData.size();i++){
             if(!types.get(i).isValid(columnData.get(i))){
                 throw new Exception("Type of row is not valid");
@@ -99,14 +100,18 @@ public class DatabaseManagerImpl implements DatabaseManager {
     }
     
     @Override
-    public List<Row> removeRow(String tableName, Map<Integer,String> columnData) throws Exception {
+    public List<Row> removeRow(String tableName, List<String> columnData) throws Exception {
         
         Table table = loadTable(tableName);
-        List<Type> types = table.getColumnTypes();
-        for(int curKey : columnData.keySet()){
-            Type curType = types.get(curKey-1);
-            if(!curType.isValid(columnData.get(curKey))){
-                throw new Exception("Type of row is not valid");
+        List<Type> types = table.columnTypes();
+        for (int curKey = 1; curKey < columnData.size(); curKey++) {
+            String cellData = columnData.get(curKey);
+            if (StringUtils.isNotBlank(cellData)) {
+                Type curType = types.get(curKey-1);
+                if(!curType.isValid(cellData)) {
+                    throw new Exception("Type of row is not valid");
+                }
+                curKey++;
             }
         }
         
@@ -123,11 +128,13 @@ public class DatabaseManagerImpl implements DatabaseManager {
         while((currentLine = reader.readLine()) != null){
             toRemove = true;
             String[] curLineData = currentLine.split(" ");
-            for(int curKey : columnData.keySet()){
-                if(!curLineData[curKey-1].equals(columnData.get(curKey))){
+            for (int curKey = 1; curKey < columnData.size(); curKey++) {
+                String cellData = columnData.get(curKey);
+                if (StringUtils.isNotBlank(cellData) && !curLineData[curKey-1].equals(cellData)){
                     toRemove = false;
                     break;
                 }
+                curKey++;
             }
             if(toRemove == false) writer.write(currentLine+"\n");
             else{
@@ -138,9 +145,9 @@ public class DatabaseManagerImpl implements DatabaseManager {
                 res.add(new Row(valueList));
             }
         }
-        tableFileTemp.renameTo(tableFile);
         reader.close();
         writer.close();
+        tableFileTemp.renameTo(tableFile);
         return res;
     }
     
@@ -174,7 +181,7 @@ public class DatabaseManagerImpl implements DatabaseManager {
             columnTypes.add(Type.createType(columnTypeName));
         }
         
-        Table result = new Table(tableName, columnTypes);
+        Table result = new Table(tableName, Arrays.asList(columnTypeNames));
         return result;
     }
     
@@ -183,7 +190,7 @@ public class DatabaseManagerImpl implements DatabaseManager {
         List<Row> result = new ArrayList<Row>();
         
         Table table = loadTable(tableName);
-        List<Type> types = table.getColumnTypes();
+        List<Type> types = table.columnTypes();
         File tableFile = new File(new File(databaseFolder,tableName), TABLE_FILE_NAME);
         BufferedReader reader = new BufferedReader(new FileReader(tableFile));
         
@@ -212,8 +219,8 @@ public class DatabaseManagerImpl implements DatabaseManager {
         Table table1 = loadTable(tableName1);
         Table table2 = loadTable(tableName2);
     
-        List<Type> types1 = table1.getColumnTypes();
-        List<Type> types2 = table2.getColumnTypes();
+        List<Type> types1 = table1.columnTypes();
+        List<Type> types2 = table2.columnTypes();
         if(types1.size() != types2.size()){
             throw new Exception("Tables have defferent schemes");
         }
@@ -247,8 +254,8 @@ public class DatabaseManagerImpl implements DatabaseManager {
         Table table1 = loadTable(tableName1);
         Table table2 = loadTable(tableName2);
     
-        List<Type> types1 = table1.getColumnTypes();
-        List<Type> types2 = table2.getColumnTypes();
+        List<Type> types1 = table1.columnTypes();
+        List<Type> types2 = table2.columnTypes();
         if(types1.size() != types2.size()){
             throw new Exception("Tables have defferent schemes");
         }
@@ -280,7 +287,7 @@ public class DatabaseManagerImpl implements DatabaseManager {
     @Override
     public Table uniqueTable(String tableName) throws Exception {
         Table table = loadTable(tableName);
-        List<Type> types = table.getColumnTypes();
+        List<Type> types = table.columnTypes();
         
         List<String> typeNames = new ArrayList<String>();
         for(int i=0;i<types.size();i++) typeNames.add(types.get(i).getName());
@@ -302,7 +309,7 @@ public class DatabaseManagerImpl implements DatabaseManager {
         for(int i=0;i<row.length();i++){
             if(stringRow.length() > 0)
                 stringRow.append(' ');
-            stringRow.append(row.getElement(i).getData());
+            stringRow.append(row.getElement(i).data());
         }
         if(stringRow.length() > 0) stringRow.append('\n');
         File tableFile = new File(new File(databaseFolder, tableName), TABLE_FILE_NAME);

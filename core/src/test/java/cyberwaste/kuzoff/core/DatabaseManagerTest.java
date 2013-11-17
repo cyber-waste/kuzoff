@@ -4,11 +4,10 @@ import static org.junit.Assert.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import org.junit.After;
 import org.junit.Before;
@@ -65,7 +64,7 @@ public class DatabaseManagerTest {
         Iterator<Table> it = tables.iterator();
         Table table = it.next();
         assertEquals(table.getName(), "table2");
-        List<Type> types = table.getColumnTypes();
+        List<Type> types = table.columnTypes();
         for(int i=0;i<types.size();i++){
             assertEquals(types.get(i).getName(),typeNames[i]);
         }
@@ -92,8 +91,7 @@ public class DatabaseManagerTest {
     
     @Test
     public void removeRowTest() throws Exception {
-        Map<Integer,String> columnData = new HashMap<Integer, String>();
-        columnData.put(2, "a");
+        List<String> columnData = Arrays.asList(null, "a");
         manager.removeRow("table1", columnData);
         List<Row> rows = manager.loadTableData("table1");
         assertEquals(1,rows.size());
@@ -111,7 +109,7 @@ public class DatabaseManagerTest {
         assertEquals(3, rows.size());
         String[][] rowDataActual = {{"10","a"},{"20","b"},{"30","c"}};
         for(int i=0;i<rows.size();i++){
-            for(int j=0;j<unionTable.getColumnTypes().size();j++){
+            for(int j=0;j<unionTable.columnTypes().size();j++){
                 assertEquals(rowDataActual[i][j], rows.get(i).getElement(j).getValue());
             }
         }
@@ -124,7 +122,7 @@ public class DatabaseManagerTest {
         assertEquals(1, rows.size());
         Row row = rows.get(0);
         String[] rowDataActual = {"10","a"};
-        for(int i=0;i<differenceTable.getColumnTypes().size();i++){
+        for(int i=0;i<differenceTable.columnTypes().size();i++){
             assertEquals(rowDataActual[i], row.getElement(i).getValue());
         }
     }
@@ -136,7 +134,7 @@ public class DatabaseManagerTest {
         assertEquals(2, rows.size());
         String[][] rowDataActual = {{"20","b"},{"30","c"}};
         for(int i=0;i<rows.size();i++){
-            for(int j=0;j<uniqueTable.getColumnTypes().size();j++){
+            for(int j=0;j<uniqueTable.columnTypes().size();j++){
                 assertEquals(rowDataActual[i][j], rows.get(i).getElement(j).getValue());
             }
         }
