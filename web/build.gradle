@@ -1,0 +1,30 @@
+version = '0.0'
+
+apply plugin: 'java'
+sourceCompatibility = 1.6
+
+tasks.withType(Compile) {
+    options.encoding = 'UTF-8'
+}
+
+dependencies {
+    compile 'org.springframework:spring-web:3.2.3.RELEASE'
+    compile 'javax:javaee-web-api:6.0'
+    
+    compile 'com.sun.faces:jsf-api:2.1.12'
+    compile 'com.sun.faces:jsf-impl:2.1.12'
+    compile 'org.primefaces:primefaces:3.5'
+}
+
+apply plugin: 'war'
+
+war {
+    archiveName 'kuzoff.war'
+}
+
+repositories {
+    mavenCentral()
+    maven {
+        url "http://repository.primefaces.org"
+    }
+}
