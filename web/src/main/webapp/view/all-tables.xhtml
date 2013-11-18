@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html 
+    xmlns="http://www.w3c.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:p="http://primefaces.org/ui">
+    
+    <h:head>
+        <title>
+            all-tables
+        </title>
+    </h:head>
+    
+    <h:body>
+
+        <h1>list of all tables</h1>
+        
+        <p:selectOneMenu value="#{allTables.database}">  
+            <f:selectItem itemLabel="Select database" itemValue="" />  
+            <f:selectItems value="#{allTables.databases}" />  
+        </p:selectOneMenu>  
+
+        <p:growl id="growl" showDetail="true" sticky="true" autoUpdate="true" />
+
+        <p:dataTable var="table" value="#{allTables.tables}">
+        
+            <p:column headerText="Name">
+                <h:outputText value="#{table.name}" />
+            </p:column>
+            
+        </p:dataTable>
+
+    </h:body>
+
+</html>
