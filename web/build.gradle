@@ -8,6 +8,8 @@ tasks.withType(Compile) {
 }
 
 dependencies {
+    compile project(':core')
+    
     compile 'org.springframework:spring-web:3.2.3.RELEASE'
     compile 'javax:javaee-web-api:6.0'
     

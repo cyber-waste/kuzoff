@@ -10,13 +10,13 @@
     </application>
     
     <managed-bean>
-        <managed-bean-name>?</managed-bean-name>
-        <managed-bean-class>?</managed-bean-class>
+        <managed-bean-name>allTables</managed-bean-name>
+        <managed-bean-class>cyberwaste.kuzoff.web.jsf.AllTables</managed-bean-class>
         <managed-bean-scope>view</managed-bean-scope>
         
         <managed-property>
-            <property-name>?</property-name>
-            <value>?</value>
+            <property-name>databaseManager</property-name>
+            <value>#{databaseManager}</value>
         </managed-property>
     </managed-bean>
     

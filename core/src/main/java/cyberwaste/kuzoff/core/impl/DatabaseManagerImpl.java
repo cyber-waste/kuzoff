@@ -29,7 +29,7 @@ public class DatabaseManagerImpl implements DatabaseManager {
     private static final String TABLE_FILE_NAME = "table";
     private static final String TABLE_FILE_NAME_TEMP = "table_temp";
     
-    private static final File KUZOFF_HOME = new File(System.getProperty("user.home"), "kuzoff");
+    public static final File KUZOFF_HOME = new File(System.getProperty("user.home"), "kuzoff");
     
     private File databaseFolder;
     

@@ -15,20 +15,26 @@
 
         <h1>list of all tables</h1>
         
-        <p:selectOneMenu value="#{allTables.database}">  
-            <f:selectItem itemLabel="Select database" itemValue="" />  
-            <f:selectItems value="#{allTables.databases}" />  
-        </p:selectOneMenu>  
-
         <p:growl id="growl" showDetail="true" sticky="true" autoUpdate="true" />
 
-        <p:dataTable var="table" value="#{allTables.tables}">
+        <h:form>
         
-            <p:column headerText="Name">
-                <h:outputText value="#{table.name}" />
-            </p:column>
+            <p:selectOneMenu value="#{allTables.database}">  
+                <f:selectItem itemLabel="Select database" itemValue="" />  
+                <f:selectItems value="#{allTables.databases}" />  
+                  
+                <p:ajax event="change" update="tables" />  
+            </p:selectOneMenu>  
+
+            <p:dataTable id="tables" var="table" value="#{allTables.tables}">
+        
+                <p:column headerText="Name">
+                    <h:outputText value="#{table.name}" />
+                </p:column>
             
-        </p:dataTable>
+            </p:dataTable>
+        
+        </h:form>
 
     </h:body>
 
