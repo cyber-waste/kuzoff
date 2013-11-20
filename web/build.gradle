@@ -28,3 +28,21 @@ repositories {
         url "http://repository.primefaces.org"
     }
 }
+
+task deploy(type:Exec) {
+    if (System.properties['os.name'].toLowerCase().contains('windows')) {
+        commandLine 'cmd', '/c', 'src\\build\\bat\\deploy.bat'
+    } else {
+        commandLine 'sh', 'src/build/shell/deploy.sh'
+    }
+}
+deploy.dependsOn build
+
+task start(type:Exec) {
+    if (System.properties['os.name'].toLowerCase().contains('windows')) {
+        commandLine 'cmd', '/c', 'src\\build\\bat\\start.bat'
+    } else {
+        commandLine 'sh', 'src/build/shell/start.sh'
+    }
+}
+start.dependsOn deploy

@@ -13,3 +13,4 @@ iiop-server/orb.db
 
 # Build scritps #
 !webservice-server/src/build/
+!web/src/build/
