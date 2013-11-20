@@ -28,7 +28,7 @@ task rmiDependencies(type: Sync) {
 rmiDependencies.dependsOn rmiPrepare
 
 task rmic(type:Exec) {
-    commandLine 'rmic', '-poa', '-iiop', '-d', "$buildDir/rmic/", '-classpath', "$buildDir/libs/*;$buildDir/rmi-dependencies/*", 'cyberwaste.kuzoff.iiop.server.RemoteDatabaseManagerImpl'
+    commandLine 'rmic', '-poa', '-iiop', '-d', "$buildDir/rmic/", '-classpath', "$buildDir/libs/*:$buildDir/rmi-dependencies/*", 'cyberwaste.kuzoff.iiop.server.RemoteDatabaseManagerImpl'
 }
 rmic.dependsOn assemble
 rmic.dependsOn rmiDependencies
