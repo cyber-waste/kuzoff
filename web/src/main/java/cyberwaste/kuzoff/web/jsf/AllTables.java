@@ -17,7 +17,7 @@ public class AllTables {
     private DatabaseManager databaseManager;
     
     private String database;
-    private Table table;
+    private String table;
     
     public String getDatabase() {
         return database;
@@ -27,11 +27,11 @@ public class AllTables {
         this.database = database;
     }
     
-    public Table getTable() {
+    public String getTable() {
         return table;
     }
     
-    public void setTable(Table table) {
+    public void setTable(String table) {
         this.table = table;
     }
     
@@ -43,10 +43,14 @@ public class AllTables {
         return databases;
     }
     
-    public Collection<Table> getTables() throws IOException {
+    public Collection<String> getTables() throws IOException {
         try {
             databaseManager.forDatabaseFolder(database);
-            return databaseManager.listTables();
+            Collection<String> tables = new ArrayList<String>();
+            for (Table table : databaseManager.listTables()) {
+                tables.add(table.getName());
+            }
+            return tables;
         } catch (Exception e) {
             return Collections.emptyList();
         }
@@ -55,7 +59,16 @@ public class AllTables {
     public List<Row> getData() throws IOException {
         try {
             databaseManager.forDatabaseFolder(database);
-            return databaseManager.loadTableData(table.getName());
+            return databaseManager.loadTableData(table);
+        } catch (Exception e) {
+            return Collections.emptyList();
+        }
+    }
+    
+    public List<String> getColumnTypeNames() throws IOException {
+        try {
+            databaseManager.forDatabaseFolder(database);
+            return databaseManager.loadTable(table).getColumnTypeNames();
         } catch (Exception e) {
             return Collections.emptyList();
         }

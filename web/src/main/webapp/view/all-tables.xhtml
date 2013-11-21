@@ -20,6 +20,7 @@
         <h:form>
         
             <p:selectOneMenu value="#{allTables.database}">  
+                <f:selectItem itemLabel="Select database" itemValue="" />   
                 <f:selectItems value="#{allTables.databases}" />  
                   
                 <p:ajax event="change" update="tables table" />  
@@ -28,9 +29,8 @@
             <br/>
         
             <p:selectOneMenu id="tables" value="#{allTables.table}"> 
-                <f:selectItems 
-                    value="#{allTables.tables}" var="table" 
-                    itemLabel="#{table.name}" itemValue="#{table}" />  
+                <f:selectItem itemLabel="Select table" itemValue="" />
+                <f:selectItems value="#{allTables.tables}" />  
                   
                 <p:ajax event="change" update="table" />  
             </p:selectOneMenu>  
@@ -38,11 +38,11 @@
             <p:dataTable id="table" var="row" value="#{allTables.data}">
                 
                 <p:columns 
-                        value="#{allTables.table.columnTypeNames}" 
+                        value="#{allTables.columnTypeNames}" 
                         var="column" columnIndexVar="colIndex">
                     
                     <f:facet name="header">
-                        Column \##{colIndex}: #{column}
+                        Column \##{colIndex + 1}: #{column}
                     </f:facet>
                 
                     #{row.row[colIndex].value}
