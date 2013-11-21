@@ -36,7 +36,7 @@
                                 value="#{table.columnTypeNames}" 
                                 var="column" columnIndexVar="colIndex">
                             <f:facet name="header">
-                                #{colIndex}
+                                Column \##{colIndex}: #{column}
                             </f:facet>
                             
                             #{row.row[colIndex].value}
