@@ -7,9 +7,12 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import org.primefaces.event.CellEditEvent;
+
 import cyberwaste.kuzoff.core.DatabaseManager;
 import cyberwaste.kuzoff.core.domain.Row;
 import cyberwaste.kuzoff.core.domain.Table;
+import cyberwaste.kuzoff.core.domain.Value;
 import cyberwaste.kuzoff.core.impl.DatabaseManagerImpl;
 
 public class AllTables {
@@ -72,7 +75,26 @@ public class AllTables {
         } catch (Exception e) {
             return Collections.emptyList();
         }
-    }
+    }  
+  
+    public void onCellEdit(CellEditEvent event) throws Exception {
+        String columnHeader = event.getColumn().getHeaderText();
+        int columnIndex = Integer.parseInt(columnHeader.substring(columnHeader.indexOf("#") + 1, columnHeader.indexOf(":"))) - 1;
+        
+        List<Row> data = getData();
+        
+        List<String> oldRow = new ArrayList<String>();
+        List<String> newRow = new ArrayList<String>();
+        for (Value value : data.get(event.getRowIndex()).getRow()) {
+            oldRow.add(value.data());
+            newRow.add(value.data());
+        }
+        newRow.set(columnIndex, event.getNewValue().toString());
+
+        databaseManager.forDatabaseFolder(database);
+        databaseManager.removeRow(table, oldRow);
+        databaseManager.addRow(table, newRow);
+    } 
     
     public void setDatabaseManager(DatabaseManager databaseManager) {
         this.databaseManager = databaseManager;

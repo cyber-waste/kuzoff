@@ -35,7 +35,9 @@
                 <p:ajax event="change" update="table" />  
             </p:selectOneMenu>  
 
-            <p:dataTable id="table" var="row" value="#{allTables.data}">
+            <p:dataTable 
+                    id="table" var="row" value="#{allTables.data}"
+                    editable="true" editMode="cell">
                 
                 <p:columns 
                         value="#{allTables.columnTypeNames}" 
@@ -44,10 +46,22 @@
                     <f:facet name="header">
                         Column \##{colIndex + 1}: #{column}
                     </f:facet>
-                
-                    #{row.row[colIndex].value}
+                    
+                    <p:cellEditor>
+                        <f:facet name="output">
+                            <h:outputText value="#{row.row[colIndex].value}" />
+                        </f:facet>
+                        
+                        <f:facet name="input">
+                            <p:inputText 
+                                value="#{row.row[colIndex].value}" 
+                                style="width:96%"/>
+                        </f:facet>  
+                    </p:cellEditor>
+                        
                 </p:columns>
                         
+                <p:ajax event="cellEdit" listener="#{allTables.onCellEdit}" />  
                 
             </p:dataTable>
             
