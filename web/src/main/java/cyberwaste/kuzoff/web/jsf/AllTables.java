@@ -47,10 +47,6 @@ public class AllTables {
         return databaseManager.loadTableData(table.getName());
     }
     
-    public List<String> schema(Table table) {
-        return table.getColumnTypeNames();
-    }
-    
     public void setDatabaseManager(DatabaseManager databaseManager) {
         this.databaseManager = databaseManager;
     }
