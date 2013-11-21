@@ -17,6 +17,7 @@ public class AllTables {
     private DatabaseManager databaseManager;
     
     private String database;
+    private Table table;
     
     public String getDatabase() {
         return database;
@@ -24,6 +25,14 @@ public class AllTables {
     
     public void setDatabase(String database) {
         this.database = database;
+    }
+    
+    public Table getTable() {
+        return table;
+    }
+    
+    public void setTable(Table table) {
+        this.table = table;
     }
     
     public List<String> getDatabases() {
@@ -43,8 +52,13 @@ public class AllTables {
         }
     }
     
-    public List<Row> data(Table table) throws IOException {
-        return databaseManager.loadTableData(table.getName());
+    public List<Row> getData() throws IOException {
+        try {
+            databaseManager.forDatabaseFolder(database);
+            return databaseManager.loadTableData(table.getName());
+        } catch (Exception e) {
+            return Collections.emptyList();
+        }
     }
     
     public void setDatabaseManager(DatabaseManager databaseManager) {

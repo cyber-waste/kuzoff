@@ -20,32 +20,37 @@
         <h:form>
         
             <p:selectOneMenu value="#{allTables.database}">  
-                <f:selectItem itemLabel="Select database" itemValue="" />  
                 <f:selectItems value="#{allTables.databases}" />  
                   
-                <p:ajax event="change" update="tables" />  
+                <p:ajax event="change" update="tables table" />  
+            </p:selectOneMenu>
+            
+            <br/>
+        
+            <p:selectOneMenu id="tables" value="#{allTables.table}"> 
+                <f:selectItems 
+                    value="#{allTables.tables}" var="table" 
+                    itemLabel="#{table.name}" itemValue="#{table}" />  
+                  
+                <p:ajax event="change" update="table" />  
             </p:selectOneMenu>  
 
-            <p:accordionPanel id="tables" var="table" value="#{allTables.tables}">
-        
-                <p:tab title="#{table.name}">
-                    <p:dataTable 
-                            id="table" var="row" 
-                            value="#{allTables.data(table)}">
-                        <p:columns 
-                                value="#{table.columnTypeNames}" 
-                                var="column" columnIndexVar="colIndex">
-                            <f:facet name="header">
-                                Column \##{colIndex}: #{column}
-                            </f:facet>
-                            
-                            #{row.row[colIndex].value}
-                        </p:columns>
-                    </p:dataTable>
-                </p:tab>
+            <p:dataTable id="table" var="row" value="#{allTables.data}">
+                
+                <p:columns 
+                        value="#{allTables.table.columnTypeNames}" 
+                        var="column" columnIndexVar="colIndex">
+                    
+                    <f:facet name="header">
+                        Column \##{colIndex}: #{column}
+                    </f:facet>
+                
+                    #{row.row[colIndex].value}
+                </p:columns>
+                        
+                
+            </p:dataTable>
             
-            </p:accordionPanel>
-        
         </h:form>
 
     </h:body>
