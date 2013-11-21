@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.List;
 
 import cyberwaste.kuzoff.core.DatabaseManager;
+import cyberwaste.kuzoff.core.domain.Row;
 import cyberwaste.kuzoff.core.domain.Table;
 import cyberwaste.kuzoff.core.impl.DatabaseManagerImpl;
 
@@ -40,6 +41,14 @@ public class AllTables {
         } catch (Exception e) {
             return Collections.emptyList();
         }
+    }
+    
+    public List<Row> data(Table table) throws IOException {
+        return databaseManager.loadTableData(table.getName());
+    }
+    
+    public List<String> schema(Table table) {
+        return table.getColumnTypeNames();
     }
     
     public void setDatabaseManager(DatabaseManager databaseManager) {

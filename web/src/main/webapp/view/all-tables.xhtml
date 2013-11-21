@@ -26,13 +26,25 @@
                 <p:ajax event="change" update="tables" />  
             </p:selectOneMenu>  
 
-            <p:dataTable id="tables" var="table" value="#{allTables.tables}">
+            <p:accordionPanel id="tables" var="table" value="#{allTables.tables}">
         
-                <p:column headerText="Name">
-                    <h:outputText value="#{table.name}" />
-                </p:column>
+                <p:tab title="#{table.name}">
+                    <p:dataTable 
+                            id="table" var="row" 
+                            value="#{allTables.data(table)}">
+                        <p:columns 
+                                value="#{table.columnTypeNames}" 
+                                var="column" columnIndexVar="colIndex">
+                            <f:facet name="header">
+                                #{colIndex}
+                            </f:facet>
+                            
+                            #{row.row[colIndex].value}
+                        </p:columns>
+                    </p:dataTable>
+                </p:tab>
             
-            </p:dataTable>
+            </p:accordionPanel>
         
         </h:form>
 

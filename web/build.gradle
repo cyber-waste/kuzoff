@@ -15,7 +15,7 @@ dependencies {
     
     compile 'com.sun.faces:jsf-api:2.1.12'
     compile 'com.sun.faces:jsf-impl:2.1.12'
-    compile 'org.primefaces:primefaces:3.5'
+    compile 'org.primefaces:primefaces:4.0'
 }
 
 apply plugin: 'war'
