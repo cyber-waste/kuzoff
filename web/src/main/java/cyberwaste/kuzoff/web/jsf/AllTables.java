@@ -7,12 +7,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import org.primefaces.event.CellEditEvent;
-
 import cyberwaste.kuzoff.core.DatabaseManager;
 import cyberwaste.kuzoff.core.domain.Row;
 import cyberwaste.kuzoff.core.domain.Table;
-import cyberwaste.kuzoff.core.domain.Value;
 import cyberwaste.kuzoff.core.impl.DatabaseManagerImpl;
 
 public class AllTables {
@@ -21,6 +18,7 @@ public class AllTables {
     
     private String database;
     private String table;
+    private List<String> newRow;
     
     public String getDatabase() {
         return database;
@@ -34,10 +32,11 @@ public class AllTables {
         return table;
     }
     
-    public void setTable(String table) {
+    public void setTable(String table) throws IOException {
         this.table = table;
+        resetNewRow();
     }
-    
+
     public List<String> getDatabases() {
         List<String> databases = new ArrayList<String>();
         for (File databaseFolder : DatabaseManagerImpl.KUZOFF_HOME.listFiles()) {
@@ -75,26 +74,33 @@ public class AllTables {
         } catch (Exception e) {
             return Collections.emptyList();
         }
-    }  
+    }
+    
+    public List<List<String>> getNewRow() {
+        return Collections.singletonList(newRow);
+    }
+    
+    public void setNewRow(List<List<String>> newRow) {
+        this.newRow = newRow.get(0);
+    }
   
-    public void onCellEdit(CellEditEvent event) throws Exception {
-        String columnHeader = event.getColumn().getHeaderText();
-        int columnIndex = Integer.parseInt(columnHeader.substring(columnHeader.indexOf("#") + 1, columnHeader.indexOf(":"))) - 1;
-        
-        List<Row> data = getData();
-        
-        List<String> oldRow = new ArrayList<String>();
-        List<String> newRow = new ArrayList<String>();
-        for (Value value : data.get(event.getRowIndex()).getRow()) {
-            oldRow.add(value.data());
-            newRow.add(value.data());
+    public void addRow() {
+        try {
+            databaseManager.forDatabaseFolder(database);
+            databaseManager.addRow(table, newRow);
+            resetNewRow();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
-        newRow.set(columnIndex, event.getNewValue().toString());
-
-        databaseManager.forDatabaseFolder(database);
-        databaseManager.removeRow(table, oldRow);
-        databaseManager.addRow(table, newRow);
     } 
+
+    private List<String> resetNewRow() throws IOException {
+        newRow  = new ArrayList<String>();
+        for (int i = 0; i < getColumnTypeNames().size(); i++) {
+            newRow.add("");
+        }
+        return newRow;
+    }
     
     public void setDatabaseManager(DatabaseManager databaseManager) {
         this.databaseManager = databaseManager;

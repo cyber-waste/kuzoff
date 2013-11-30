@@ -7,14 +7,12 @@
     
     <h:head>
         <title>
-            all-tables
+            kuzoff
         </title>
     </h:head>
     
     <h:body>
 
-        <h1>list of all tables</h1>
-        
         <p:growl id="growl" showDetail="true" sticky="true" autoUpdate="true" />
 
         <h:form>
@@ -23,7 +21,7 @@
                 <f:selectItem itemLabel="Select database" itemValue="" />   
                 <f:selectItems value="#{allTables.databases}" />  
                   
-                <p:ajax event="change" update="tables table" />  
+                <p:ajax event="change" update="tables table new-row" />  
             </p:selectOneMenu>
             
             <br/>
@@ -32,12 +30,10 @@
                 <f:selectItem itemLabel="Select table" itemValue="" />
                 <f:selectItems value="#{allTables.tables}" />  
                   
-                <p:ajax event="change" update="table" />  
+                <p:ajax event="change" update="table new-row" />  
             </p:selectOneMenu>  
 
-            <p:dataTable 
-                    id="table" var="row" value="#{allTables.data}"
-                    editable="true" editMode="cell">
+            <p:dataTable id="table" var="row" value="#{allTables.data}">
                 
                 <p:columns 
                         value="#{allTables.columnTypeNames}" 
@@ -47,23 +43,31 @@
                         Column \##{colIndex + 1}: #{column}
                     </f:facet>
                     
-                    <p:cellEditor>
-                        <f:facet name="output">
-                            <h:outputText value="#{row.row[colIndex].value}" />
-                        </f:facet>
-                        
-                        <f:facet name="input">
-                            <p:inputText 
-                                value="#{row.row[colIndex].value}" 
-                                style="width:96%"/>
-                        </f:facet>  
-                    </p:cellEditor>
+                    <h:outputText value="#{row.row[colIndex].value}" />
                         
                 </p:columns>
-                        
-                <p:ajax event="cellEdit" listener="#{allTables.onCellEdit}" />  
                 
             </p:dataTable>
+
+            <p:dataTable id="new-row" var="newRow" value="#{allTables.newRow}">
+                
+                <p:columns 
+                        value="#{allTables.columnTypeNames}" 
+                        var="column" columnIndexVar="colIndex">
+                    
+                    <f:facet name="header">
+                        Column \##{colIndex + 1}: #{column}
+                    </f:facet>
+                    
+                    <p:inputText value="#{newRow[colIndex]}" />
+                        
+                </p:columns>
+                
+            </p:dataTable>
+            
+            <p:commandButton 
+                value="ADD ROW" update="table new-row" 
+                actionListener="#{allTables.addRow}" />  
             
         </h:form>
 
