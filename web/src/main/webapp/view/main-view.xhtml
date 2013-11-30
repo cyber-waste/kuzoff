@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html 
+    xmlns="http://www.w3c.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:p="http://primefaces.org/ui">
+    
+    <h:head>
+        <title>
+            kuzoff
+        </title>
+    </h:head>
+    
+    <h:body>
+
+        <p:growl id="growl" showDetail="true" sticky="true" autoUpdate="true" />
+
+        <h:form>
+        
+            <p:selectOneMenu value="#{mainView.database}">  
+                <f:selectItem itemLabel="Select database" itemValue="" />   
+                <f:selectItems value="#{mainView.databases}" />  
+                  
+                <p:ajax event="change" update="tables table new-row" />  
+            </p:selectOneMenu>
+            
+            <br/>
+        
+            <p:selectOneMenu id="tables" value="#{mainView.table}"> 
+                <f:selectItem itemLabel="Select table" itemValue="" />
+                <f:selectItems value="#{mainView.tables}" />  
+                  
+                <p:ajax event="change" update="table new-row" />  
+            </p:selectOneMenu>  
+
+            <p:dataTable id="table" var="row" value="#{mainView.data}">
+                
+                <p:columns 
+                        value="#{mainView.columnTypeNames}" 
+                        var="column" columnIndexVar="colIndex">
+                    
+                    <f:facet name="header">
+                        Column \##{colIndex + 1}: #{column}
+                    </f:facet>
+                    
+                    <h:outputText value="#{row.row[colIndex].value}" />
+                        
+                </p:columns>
+                
+            </p:dataTable>
+
+            <p:dataTable id="new-row" var="newRow" value="#{mainView.newRow}">
+                
+                <p:columns 
+                        value="#{mainView.columnTypeNames}" 
+                        var="column" columnIndexVar="colIndex">
+                    
+                    <f:facet name="header">
+                        Column \##{colIndex + 1}: #{column}
+                    </f:facet>
+                    
+                    <p:inputText value="#{newRow[colIndex]}" />
+                        
+                </p:columns>
+                
+            </p:dataTable>
+            
+            <p:commandButton 
+                value="ADD ROW" update="table new-row" 
+                actionListener="#{mainView.addRow}" ajax="true" />  
+            
+        </h:form>
+
+    </h:body>
+
+</html>

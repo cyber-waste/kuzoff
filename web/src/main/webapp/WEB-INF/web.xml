@@ -26,7 +26,7 @@
     
     <!-- Home page -->
     <welcome-file-list>
-        <welcome-file>/view/all-tables.xhtml</welcome-file>
+        <welcome-file>/view/main-view.xhtml</welcome-file>
     </welcome-file-list>
 
 </web-app>

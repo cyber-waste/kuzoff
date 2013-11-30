@@ -10,8 +10,8 @@
     </application>
     
     <managed-bean>
-        <managed-bean-name>allTables</managed-bean-name>
-        <managed-bean-class>cyberwaste.kuzoff.web.jsf.AllTables</managed-bean-class>
+        <managed-bean-name>mainView</managed-bean-name>
+        <managed-bean-class>cyberwaste.kuzoff.web.jsf.MainView</managed-bean-class>
         <managed-bean-scope>view</managed-bean-scope>
         
         <managed-property>
