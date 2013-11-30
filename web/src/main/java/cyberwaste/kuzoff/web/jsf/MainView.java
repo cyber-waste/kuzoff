@@ -18,6 +18,7 @@ public class MainView {
     
     private String database;
     private String table;
+    private String tableForOperation;
     private List<String> newRow;
     
     public String getDatabase() {
@@ -35,6 +36,14 @@ public class MainView {
     public void setTable(String table) throws IOException {
         this.table = table;
         resetNewRow();
+    }
+    
+    public String getTableForOperation() {
+        return tableForOperation;
+    }
+    
+    public void setTableForOperation(String tableForOperation) {
+        this.tableForOperation = tableForOperation;
     }
 
     public List<String> getDatabases() {
@@ -93,6 +102,26 @@ public class MainView {
             throw new RuntimeException(e);
         }
     } 
+    
+    public void union() {
+        try {
+            databaseManager.forDatabaseFolder(database);
+            Table result = databaseManager.unionTable(table, tableForOperation);
+            setTable(result.getName());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    } 
+    
+    public void diff() {
+        try {
+            databaseManager.forDatabaseFolder(database);
+            Table result = databaseManager.differenceTable(table, tableForOperation);
+            setTable(result.getName());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     private List<String> resetNewRow() throws IOException {
         newRow  = new ArrayList<String>();

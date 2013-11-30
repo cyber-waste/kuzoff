@@ -21,7 +21,7 @@
                 <f:selectItem itemLabel="Select database" itemValue="" />   
                 <f:selectItems value="#{mainView.databases}" />  
                   
-                <p:ajax event="change" update="tables table new-row" />  
+                <p:ajax event="change" update="tables tables-for-operation table new-row" />  
             </p:selectOneMenu>
             
             <br/>
@@ -67,7 +67,28 @@
             
             <p:commandButton 
                 value="ADD ROW" update="table new-row" 
-                actionListener="#{mainView.addRow}" ajax="true" />  
+                actionListener="#{mainView.addRow}" ajax="true" /> 
+                
+            <br/>
+            
+            <p:commandButton 
+                value="UNION WITH"
+                actionListener="#{mainView.union}" ajax="true" 
+                update="tables tables-for-operation table new-row" />  
+            
+            <p:commandButton 
+                value="DIFFERENCE WITH" 
+                actionListener="#{mainView.diff}" ajax="true" 
+                update="tables tables-for-operation table new-row" /> 
+                        
+            <br/>
+            
+            <p:selectOneMenu id="tables-for-operation" value="#{mainView.tableForOperation}"> 
+                <f:selectItem itemLabel="Select table" itemValue="" />
+                <f:selectItems value="#{mainView.tables}" />  
+                  
+                <p:ajax event="change" update="table new-row" />  
+            </p:selectOneMenu>   
             
         </h:form>
 
